@@ -1,0 +1,13 @@
+name = Editview
+description = "Allows users to add and edit nodes in a view."
+core = 7.x
+package = Views
+dependencies[] = views
+
+version = "7.x-1.0-beta3"
+core = "7.x"
+project = "editview"
+datestamp = "1296076084"
+
+files[] = includes/editview_plugin_style_node_add.inc
+files[] = includes/editview_plugin_row_node_edit.inc

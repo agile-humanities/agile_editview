@@ -1,0 +1,79 @@
+Important new features:
+
+* Add support for users/profiles (#603648, #235385)
+* Add support for locations (issue ???)
+* Make it possible to mark fields as editable (#635076)
+  And make the add a new node form independent of this (#527558)
+  This will also solve fields which are not displayed at all now (#481956, 
+  #472986)
+  And probably the image problem (#248337, #242477, #219344)
+* Create a Save All button (#151278)
+  Or perhaps optionally a commit-when-leaving-a-field option so we do not
+  need a save button at all (#583526)
+* Surpress headings on each row (#583542)
+  Related: help text (#885712)
+* Mark changed fields (#583540, #151274)
+* Do something about field input types, for Wysiwyg, input formats, etc. 
+  (#467028) and for number of lines in the text box (#500042)
+* Access control (front page): only show content if a user may not edit
+* Show fields as required (front page)
+* Use content types field labels when views labels are left blank (front page)
+
+
+Secondary new features:
+
+* Add support for Ubercart (#342172, #863274)
+* Add support for Casetracker (#737378)
+* Add support for views_customfield (#527822)
+* Add support for path_auto (#244748)
+* Add support for Draggable Views (#466032)
+* Investigate other lay-out options (#581488, #484762, #375710)
+* Add "Node edit"/"Node delete" buttons optionally (#459596)
+* Add several new nodes at once (#586130)
+  Not entirely clear what the request is. May be useful with the Save All
+  button. At the moment, it seems that the commit on a new node does a
+  full page refresh? See #586142 for a request to Ajaxify this
+* Disable Ajax updates optionally (#561442)
+  Not sure if this is a good idea - Drupal everywhere uses Ajax if it 
+  is available and nowhere allows it to be selectively turned off AFAIK
+* Add support for Organic Groups (#586160)
+* Do not display empty rows (#560084)
+* Multiple node types (#559754)
+  Probably impossible to implement cleanly, but should be investigated
+* Add support for node settings like "comments allowed" (#885720)
+* Optionally disable JS animations (#467056)
+* Add support for file field or other uploads (#121407)
+* Add support for ASIN (#121154)
+* Add support for Link (#121154)
+* Investigate if it would be possible to leave out the unused fields instead
+  of hiding them (this would involve reassembling the form on submit)
+  (See #236853 comment #3).
+
+
+Important bugs:
+
+* Check error messages with ERR_ALL (#850714)
+  I can not reproduce this, may be related to a specific field type.
+* Check memory consumption (#640684, #477288, #719806, front page)
+  May be related to using a Javascript text box editor
+  May sometimes be SQL timeouts due to cache (#401186)
+* views_embed_view gives errors (#660200)
+* Random failures (#767206, #655290, #201783, #477292)
+* Javascript problems (#222302, #217944)
+* Fix outstanding taxonomy problems, especially free tagging (#460206, #172797,
+  #347568, #172797, #655942, #219344)
+  Last one is actually a feature request...
+* Lay-out or CSS problems (#308876)
+
+
+Secondary bugs:
+
+* Check bad interaction with editable fields (#599140)
+* Check bad interaction with Signup module (#804642, #714002)
+* Check bad interaction with Taxonomy Access module (#885704)
+* Theming problems (#459642)
+
+Drupal 5 only:
+* Possible issues with the date module (#310517)
+* Problems with checkboxes (#284359)
+* Lay-out or CSS problems (#125401)

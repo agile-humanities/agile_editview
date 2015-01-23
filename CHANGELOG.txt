@@ -1,0 +1,68 @@
+$Id: CHANGELOG.txt,v 1.1.2.8 2011/01/26 20:53:58 frodo Exp $
+
+Editview 6.x-1.0-beta3, 2011-01-26
+----------------------------------
+
+#635080, #609644, #426322, #296744, #296662, #264855, #98363 by Frodo Looijaard:
+  Fix several issues with multi-value CCK fields, especially node references
+by Frodo Looijaard: Add a patch for CCK for multi-value fields (#1037460)
+by Frodo Looijaard: Add a patch for core for private download combined with
+  the locale module (#250451)
+by Frodo Looijaard: Introduce saving and restoring of #id for Javascript calls
+by Frodo Looijaard: Make Javascript handling more robust
+
+
+Editview 6.x-1.0-beta2, 2010-10-03
+----------------------------------
+#480116 by Darren Oh: Fixed error in style plugin.
+#699324 by Frodo Looijaard: keep HTML valid by using a div instead of a span
+  around the hidden part of the form.
+#585304 and #464094 by Frodo Looijaard: do not use deprecated JQuery attribute
+  selector syntax
+#885716 by Frodo Looijaard: Make new node form optional
+#417404 by Frodo Looijaard: Fix form caching problems with minimum cache 
+  lifetimes
+by Frodo Looijaard: Fixed issues with Date module (this may also fix other complex CCK fields)
+by Frodo Looijaard: Update documenation and add examples to the internal help
+
+
+Editview 6.x-1.0-beta1, 2009-05-04
+----------------------------------
+#170220 by Agileware: Added auto_nodetitle support.
+#367744 by Darren Oh: Updated to Drupal 6 and Views 2.
+#396172 by Darren Oh: Fixed error notices.
+#393540 by Darren Oh: Fixed item visibility.
+#398846 by Darren Oh: Added support for OG fields.
+
+
+Editview 5.x-1.0, 2009-01-29
+----------------------------
+#217937 by Agileware: Fixed image uploads.
+#305350 by Agileware: Added support for jscalendar date fields.
+
+
+Editview 5.x-0.3, 2008-01-28
+----------------------------
+#119208 by Agileware: Added an install file to warn users when Drupal needs to
+be patched.
+#152819 by cnb: Module .info files should not define 'version' in CVS.
+by Agileware: File uploads now work.
+by Agileware: Updated to the latest jquery.form.js (version 2.03).
+by Agileware: Added hook_field_form_render so that other modules can define a
+  way of rendering certain fields, especially when their views fieldname doesn't
+  directly correspond to a node fieldname.
+
+
+Editview 5.x-0.1, 2007-02-20
+----------------------------
+by nterbogt: Added choice of table or compressed view.
+by nterbogt: Fixed .info file format.
+by nterbogt: Initial Drupal 5 release.
+
+
+Editview 4.7.x-1.x, 2006-11-02
+------------------------------
+#92034 by wrunt: Fixed type error.
+by wrunt: An Editview now appears even when empty, so you can add nodes to an
+  empty view.
+by wrunt: Got rid of license in favour of LICENSE.txt.

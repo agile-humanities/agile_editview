@@ -1,0 +1,108 @@
+# $Id: editview.pot,v 1.1 2009/02/17 00:39:02 agileware Exp $
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  editview.module,v 1.6 2007/02/20 23:51:19 nterbogt
+#  editview.info,v 1.3 2007/05/16 04:22:02 agileware
+#  includes/editview.views.inc: n/a
+#  includes/editview_plugin_style_node_add.inc: n/a
+#  editview.js,v 1.4 2007/02/20 23:51:19 nterbogt
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2009-02-06 14:05-0500\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: editview.module:30
+msgid "Editview is a Views plug-in that allows you to create views in which nodes are editable and new nodes can be created. Editview works with or without JavaScript enabled."
+msgstr ""
+
+#: editview.module:31
+msgid "Usage"
+msgstr ""
+
+#: editview.module:32
+msgid "Editable node views are created just like any other type of view, with a few caveats:"
+msgstr ""
+
+#: editview.module:34
+msgid "Add or edit a node view."
+msgstr ""
+
+#: editview.module:35
+msgid "If you want to be able to add new nodes in the view, set the style to Editview in Basic settings. Otherwise, you can choose any style that allows you to set a row style and set the row style to Editview."
+msgstr ""
+
+#: editview.module:36
+msgid "Include any required fields in the view, or new nodes will fail validation."
+msgstr ""
+
+#: editview.module:0
+msgid "editview"
+msgstr ""
+
+#: editview.info:0 includes/editview.views.inc:31;46
+msgid "Editview"
+msgstr ""
+
+#: editview.info:0
+msgid "Allows users to add and edit nodes in a view."
+msgstr ""
+
+#: editview.info:0
+msgid "Views"
+msgstr ""
+
+#: includes/editview.views.inc:32
+msgid "Displays a new node form."
+msgstr ""
+
+#: includes/editview.views.inc:47
+msgid "Displays a node edit form."
+msgstr ""
+
+#: includes/editview_plugin_style_node_add.inc:39
+msgid "Node type"
+msgstr ""
+
+#: includes/editview_plugin_style_node_add.inc:42
+msgid "Select a node type for the new node form."
+msgstr ""
+
+#: includes/editview_plugin_style_node_add.inc:47
+msgid "New node position"
+msgstr ""
+
+#: includes/editview_plugin_style_node_add.inc:49
+msgid "Above"
+msgstr ""
+
+#: includes/editview_plugin_style_node_add.inc:49
+msgid "Below"
+msgstr ""
+
+#: includes/editview_plugin_style_node_add.inc:50
+msgid "Specify whether a new node form should be above or below existing records."
+msgstr ""
+
+#: theme/editview.js:0
+msgid "Delete"
+msgstr ""
+
+#: theme/editview.js:0
+msgid "Are you sure you want to delete @name?"
+msgstr ""
+
+#: theme/editview.js:0
+msgid "This action cannot be undone."
+msgstr ""
+

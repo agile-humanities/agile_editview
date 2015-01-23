@@ -1,0 +1,35 @@
+diff -r -p -U2 /tmp/cck-2.8/content.module cck/content.module
+--- /tmp/cck-2.8/content.module	2010-08-12 01:27:10.000000000 +0200
++++ cck/content.module	2010-12-30 22:04:47.000000000 +0100
+@@ -487,7 +487,8 @@ function theme_content_multiple_values($
+   $output = '';
+ 
++  $nid = array_key_exists('#cck_nid', $element)?$element['#cck_nid']:"";
+   if ($field['multiple'] >= 1) {
+-    $table_id = $element['#field_name'] .'_values';
+-    $order_class = $element['#field_name'] .'-delta-order';
++    $table_id = $element['#field_name']. $nid .'_values';
++    $order_class = $element['#field_name'] . $nid .'-delta-order';
+     $required = !empty($element['#required']) ? '<span class="form-required" title="'. t('This field is required.') .'">*</span>' : '';
+ 
+diff -r -p -U2 /tmp/cck-2.8/includes/content.node_form.inc cck/includes/content.node_form.inc
+--- /tmp/cck-2.8/includes/content.node_form.inc	2009-07-18 02:40:20.000000000 +0200
++++ cck/includes/content.node_form.inc	2011-01-23 21:42:06.000000000 +0100
+@@ -219,4 +219,9 @@ function content_multiple_value_form(&$f
+     $field_name_css = str_replace('_', '-', $field_name);
+ 
++    if (array_key_exists('#node', $form) and property_exists($form['#node'], nid)) {
++      $add_more_id = "edit-". $field_name_css ."-". $field_name_css ."-". $form['#node']->nid ."-add-more";
++      $field_name_css .= $form['#node']->nid;
++      $form_element['#cck_nid'] = $form['#node']->nid;
++    }
+     $form_element[$field_name .'_add_more'] = array(
+       '#type' => 'submit',
+@@ -239,4 +244,7 @@ function content_multiple_value_form(&$f
+       '#type_name' => $field['type_name'],
+     );
++    if (isset($add_more_id)) {
++      $form_element[$field_name .'_add_more']['#id'] = $add_more_id;
++    }
+ 
+     // Add wrappers for the fields and 'more' button.

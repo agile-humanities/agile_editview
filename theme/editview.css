@@ -1,0 +1,56 @@
+/* $Id: editview.css,v 1.1.2.1 2009/05/04 10:43:08 agileware Exp $ */
+
+td.editview-field {
+  height: 1em;
+}
+
+.editview-field input {
+  max-width: 30ex;
+  _width: 30ex;
+}
+
+.editview-field .form-item label,
+.editview-field .form-item .description,
+.editview-field fieldset legend {
+  display: none;
+}
+
+.editview-field .form-item label.option {
+  display: inline;
+}
+
+.editview-field fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+/* date selector stuff */
+.editview-field .container-inline-date label,
+.editview-field .container-inline-date .form-item,
+.editview-field .container-inline-date select {
+  display: inline;
+  float: none;
+  white-space: nowrap;
+}
+
+.editview-field .container-inline-date fieldset {
+  white-space: nowrap;
+}
+
+.editview-field .date-clearing, .editview-field .date-space {
+  display: none;
+}
+
+.form-button, .form-submit {
+  margin: 0.5em 0.5em 1em 0pt !important;
+}
+
+/* Garland overrides */
+#center form {
+  margin-bottom: 0px !important;
+}
+
+table {
+  margin: 0px !important;
+}
