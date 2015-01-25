@@ -1,16 +1,15 @@
 <?php
+
 // $Id: editview.views.inc,v 1.1.2.8 2011/01/23 20:48:54 frodo Exp $
 
 /**
  * @file
  * Views functions.
  */
-
 /**
  * @addtogroup editview
  * @{
  */
-
 /**
  * New node form position: above view results.
  */
@@ -36,9 +35,9 @@ function editview_views_plugins() {
         'title' => t('Editview'),
         'help' => t('Displays a new node form.'),
         'handler' => 'editview_plugin_style_node_add',
-        'path' => drupal_get_path('module', 'editview') .'/includes',
+        'path' => drupal_get_path('module', 'editview') . '/includes',
         'theme' => 'views_view_unformatted',
-        'theme path' => drupal_get_path('module', 'views') .'/theme',
+        'theme path' => drupal_get_path('module', 'views') . '/theme',
         'theme file' => 'theme.inc',
         'base' => array('node'),
         'uses options' => TRUE,
@@ -51,9 +50,9 @@ function editview_views_plugins() {
         'title' => t('Editview'),
         'help' => t('Displays a node edit form.'),
         'handler' => 'editview_plugin_row_node_edit',
-        'path' => drupal_get_path('module', 'editview') .'/includes',
+        'path' => drupal_get_path('module', 'editview') . '/includes',
         'theme' => 'editview_view_row_node_edit',
-        'theme path' => drupal_get_path('module', 'editview') .'/theme',
+        'theme path' => drupal_get_path('module', 'editview') . '/theme',
         'theme file' => 'editview.theme.inc',
         'base' => array('node'),
         'uses fields' => TRUE,
@@ -125,28 +124,24 @@ function editview_js() {
  */
 function editview_node_form($form, &$form_state, $node, $view, $order, $uri) {
   // Get the node form
-  $debug = "goes here";
-  if (!is_object($node)) {
-    return array();
-  }
-
   $form = node_form($form, $form_state, $node);
   // Let modules alter the node form.
   $form['#method'] = 'post';
   $type = is_array($node) ? $node['type'] : $node->type;
-  $form['__drupal_alter_by_ref'] = array(&$form_state);
-  drupal_alter($type .'_node_form', $form);
-  $form['__drupal_alter_by_ref'] = array(&$form_state);
-  #drupal_alter('form', $form, $type .'_node_form');
-  $var1 = 'form';
-  $var3 = $type . '_node_form';
-  drupal_alter($var1, $form, $var3);
+
+
 
   // Change save and delete functions.
   $form['buttons']['submit']['#submit'] = array('editview_node_form_submit');
   $form['buttons']['delete']['#submit'] = array('editview_node_form_delete_submit');
 
   // Mark the buttons for Javascript handling
+  if (!isset($form['buttons']['submit']['#attributes']['class'])) {
+    $form['buttons']['submit']['#attributes']['class'] = '';
+  }
+  if (!isset($form['buttons']['delete']['#attributes']['class'])) {
+    $form['buttons']['delete']['#attributes']['class'] = '';
+  }
   $form['buttons']['submit']['#attributes']['class'] .= " editview-button";
   $form['buttons']['delete']['#attributes']['class'] .= " editview-button";
 
@@ -182,7 +177,7 @@ function editview_form_after_build($form, &$form_state) {
   // Check if we are in a Javascript callback
   if (array_key_exists('HTTP_X_REQUESTED_WITH', $_SERVER) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
     // This is a Javascript callback, so we try to restore all ids
-    if (! isset($ids)) {
+    if (!isset($ids)) {
       if (array_key_exists('values', $form_state) && array_key_exists('editview_ids', $form_state['values']) && $form_state['values']['editview_ids'] != "") {
         $ids = unserialize(gzuncompress(base64_decode($form_state['values']['editview_ids'])));
       }
@@ -190,19 +185,19 @@ function editview_form_after_build($form, &$form_state) {
     if (isset($ids)) {
       _editview_patch_ids($form, $ids);
     }
-  } else {
+  }
+  else {
     // Not javascript, so we save the ids to be picked up
     $ids = array();
     // Collect all ids
     _editview_collect_ids($form, $ids);
     // Put them into Drupal.settings.editview.ids_NID, but compress them
     // first to save on bandwidth
-    $key = "ids_". $form['editview_nid']['#value'];
+    $key = "ids_" . $form['editview_nid']['#value'];
     drupal_add_js(array('editview' => array($key => base64_encode(gzcompress(serialize($ids))))), "setting");
   }
   return $form;
 }
-
 
 /**
  * Override the node submit redirect.
@@ -229,7 +224,7 @@ function editview_node_form_delete_submit($form, &$form_state) {
   $uri = request_uri();
   if ($uri == $form['#parameters'][5]) {
     node_form_delete_submit($form, $form_state);
-    $form_state['redirect'] = array('node/'. $form_state['values']['nid'] .'/delete', 'destination='. urlencode($_GET['q']));
+    $form_state['redirect'] = array('node/' . $form_state['values']['nid'] . '/delete', 'destination=' . urlencode($_GET['q']));
   }
   else {
     node_delete($form_state['values']['nid']);
@@ -242,10 +237,11 @@ function editview_node_form_delete_submit($form, &$form_state) {
  * Each key is constructed as .[/FORMFIELD1[/FORMFIELD2[/FORMFIELD3...]]]
  * Note that this is a recursively called function.
  */
-function _editview_collect_ids($form, &$ids, $prefix=".") {
+function _editview_collect_ids($form, &$ids, $prefix = ".") {
+
   foreach ($form as $key => $value) {
     if (substr($key, 0, 1) != '#' and is_array($value)) {
-      _editview_collect_ids($value, $ids, $prefix ."/". $key);
+      // _editview_collect_ids($value, $ids, $prefix . "/" . $key);
     }
     elseif ($key == "#id") {
       $ids[$prefix] = $value;
@@ -270,7 +266,7 @@ function _editview_patch_ids(&$form, $ids) {
 function _editview_change_ids($form, $ids, $prefix, &$translate) {
   foreach ($form as $form_el_name => $form_el_val) {
     if (substr($form_el_name, 0, 1) != '#' and is_array($form_el_val)) {
-      $form[$form_el_name] = _editview_change_ids($form_el_val, $ids, $prefix ."/". $form_el_name, $translate);
+      $form[$form_el_name] = _editview_change_ids($form_el_val, $ids, $prefix . "/" . $form_el_name, $translate);
     }
     elseif ($form_el_name == "#id") {
       if (array_key_exists($prefix, $ids)) {

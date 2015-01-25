@@ -45,7 +45,11 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
     $uri = request_uri();
     $view = $variables['view'];
     $id = $variables['id'];
+    if ($variables['row']->nid == 'new') {
+      return;
+    }
     $form = drupal_get_form('editview_node_form_'. $variables['row']->nid, $node, $view, $id, $uri);
+    //$form = json_decode(json_encode($form, TRUE));
     $variables['form'] = drupal_render_children($form);
   }
 }
