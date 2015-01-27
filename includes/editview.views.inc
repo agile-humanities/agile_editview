@@ -132,18 +132,18 @@ function editview_node_form($form, &$form_state, $node, $view, $order, $uri) {
 
 
   // Change save and delete functions.
-  $form['buttons']['submit']['#submit'] = array('editview_node_form_submit');
-  $form['buttons']['delete']['#submit'] = array('editview_node_form_delete_submit');
+  $form['actions']['submit']['#submit'] = array('editview_node_form_submit');
+  $form['actions']['delete']['#submit'] = array('editview_node_form_delete_submit');
 
   // Mark the buttons for Javascript handling
-  if (!isset($form['buttons']['submit']['#attributes']['class'])) {
-    $form['buttons']['submit']['#attributes']['class'] = '';
+  if (!isset($form['actions']['submit']['#attributes']['class'])) {
+    $form['actions']['submit']['#attributes']['class'] = array();
   }
-  if (!isset($form['buttons']['delete']['#attributes']['class'])) {
-    $form['buttons']['delete']['#attributes']['class'] = '';
+  if (!isset($form['actions']['delete']['#attributes']['class'])) {
+    $form['actions']['delete']['#attributes']['class'] = array();
   }
-  $form['buttons']['submit']['#attributes']['class'] .= " editview-button";
-  $form['buttons']['delete']['#attributes']['class'] .= " editview-button";
+  $form['actions']['submit']['#attributes']['class'][] = "editview-button";
+  $form['actions']['delete']['#attributes']['class'][] = "editview-button";
 
   // We need some hidden variables to reconstruct all form options in
   // editview_js, especially in the case the form could not be recovered

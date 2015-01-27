@@ -102,12 +102,12 @@ function theme_editview_node_form(&$variables) {
     $cell['class'] = array(implode(' ', $classes));
     $row[] = $cell;
   }
-  $buttons = drupal_render($form['buttons']['submit']);
-  $buttons .= drupal_render($form['buttons']['delete']) .'<div style="display: none;">'. drupal_render_children($form) .'</div>'."\n";
+  $buttons = drupal_render($form['actions']['submit']);
+  $buttons .= drupal_render($form['actions']['delete']) .'<div style="display: none;">'. drupal_render_children($form) .'</div>'."\n";
   $handler = $view->style_plugin;
   $active = !empty($handler->active) ? $handler->active : '';
   $order = !empty($handler->order) ? $handler->order : 'asc';
-  return theme('table', array('header' => $header, 'rows' => $row));
+  return theme('table', array('header' => $header, 'rows' => array($row), 'attributes' => array('class' => array('editview-row')))) . $buttons;
   return theme('table', $header, array($row), array('class' => 'editview-row')) . $buttons;
 }
 

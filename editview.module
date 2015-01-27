@@ -131,10 +131,11 @@ function editview_menu() {
 function editview_theme() {
   return array(
     'editview_node_form' => array(
-      'arguments' => array('form' => NULL),
+      'render element' => 'form',
       'file' => 'editview.theme.inc',
       'path' => drupal_get_path('module', 'editview') .'/theme',
     ),
+
   );
 }
 
