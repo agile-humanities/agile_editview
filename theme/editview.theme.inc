@@ -50,7 +50,8 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
     }
     $form = drupal_get_form('editview_node_form_'. $variables['row']->nid, $node, $view, $id, $uri);
     $form = theme('editview_node_form', array('form' => $form, 'view' => $view));
-    $variables['form'] = drupal_render_children($form);
+    //$variables['form'] = drupal_render_children($form);
+    $variables['form'] = $form;
   }
 }
 
@@ -77,7 +78,8 @@ function theme_editview_node_form(&$variables) {
       }
     }
 
-    $header[] = $field->label();
+   // $header[] = $field->label();
+    $header[] = array("data" => $field->label());
     $classes = array();
     $cell = array('data' => '');
     foreach (module_implements('field_form_render') as $module) {
@@ -97,7 +99,7 @@ function theme_editview_node_form(&$variables) {
         }
       }
     }
-    $cell['class'] = implode(' ', $classes);
+    $cell['class'] = array(implode(' ', $classes));
     $row[] = $cell;
   }
   $buttons = drupal_render($form['buttons']['submit']);
@@ -105,6 +107,7 @@ function theme_editview_node_form(&$variables) {
   $handler = $view->style_plugin;
   $active = !empty($handler->active) ? $handler->active : '';
   $order = !empty($handler->order) ? $handler->order : 'asc';
+  return theme('table', array('header' => $header, 'rows' => $row));
   return theme('table', $header, array($row), array('class' => 'editview-row')) . $buttons;
 }
 
