@@ -49,7 +49,7 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
       return;
     }
     $form = drupal_get_form('editview_node_form_'. $variables['row']->nid, $node, $view, $id, $uri);
-    //$form = json_decode(json_encode($form, TRUE));
+    $form = theme('editview_node_form', array('form' => $form, 'view' => $view));
     $variables['form'] = drupal_render_children($form);
   }
 }
@@ -63,9 +63,10 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
  *   An HTML form.
  * @ingroup themeable
  */
-function theme_editview_node_form($form) {
-  $view = $form['#parameters'][3];
+function theme_editview_node_form(&$variables) {
+  $view = $variables['view'];
   $header = array();
+  $form = $variables['form'];
   $row = array();
   // Add selected fields to table as form fields.
   foreach ($view->field as $field) {
@@ -100,7 +101,7 @@ function theme_editview_node_form($form) {
     $row[] = $cell;
   }
   $buttons = drupal_render($form['buttons']['submit']);
-  $buttons .= drupal_render($form['buttons']['delete']) .'<div style="display: none;">'. drupal_render($form) .'</div>'."\n";
+  $buttons .= drupal_render($form['buttons']['delete']) .'<div style="display: none;">'. drupal_render_children($form) .'</div>'."\n";
   $handler = $view->style_plugin;
   $active = !empty($handler->active) ? $handler->active : '';
   $order = !empty($handler->order) ? $handler->order : 'asc';

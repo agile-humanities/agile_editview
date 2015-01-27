@@ -21,7 +21,6 @@
 ?>
 <?php if (isset($form)): ?>
   <div id="editview-node-form-<?php print $row->nid; ?>">
-    <?php print "<strong> NID is {$row->nid} </strong>"; ?>
     <?php print $form;?>
   </div>
 <?php endif; ?>
