@@ -1,11 +1,11 @@
 <?php
+
 // $Id: editview.theme.inc,v 1.1.2.4 2011/01/23 20:48:54 frodo Exp $
 
 /**
  * @file
  *
  */
-
 /**
  * @addtogroup editview
  * @{
@@ -35,9 +35,9 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
     static $run = TRUE;
     if ($run) {
       drupal_add_js('misc/jquery.form.js');
-      drupal_add_js(drupal_get_path('module', 'editview') .'/theme/editview.js');
+      drupal_add_js(drupal_get_path('module', 'editview') . '/theme/editview.js');
       drupal_add_js(array('editview' => array('submit_url' => url('editview_js'))), 'setting');
-      drupal_add_css(drupal_get_path('module', 'editview') .'/theme/editview.css');
+      drupal_add_css(drupal_get_path('module', 'editview') . '/theme/editview.css');
       module_load_include('inc', 'node', 'node.pages');
       $run = FALSE;
     }
@@ -48,7 +48,7 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
     if ($variables['row']->nid == 'new') {
       return;
     }
-    $form = drupal_get_form('editview_node_form_'. $variables['row']->nid, $node, $view, $id, $uri);
+    $form = drupal_get_form('editview_node_form_' . $variables['row']->nid, $node, $view, $id, $uri);
     $form = theme('editview_node_form', array('form' => $form, 'view' => $view));
     //$variables['form'] = drupal_render_children($form);
     $variables['form'] = $form;
@@ -78,12 +78,12 @@ function theme_editview_node_form(&$variables) {
       }
     }
 
-   // $header[] = $field->label();
+    // $header[] = $field->label();
     $header[] = array("data" => $field->label());
     $classes = array();
     $cell = array('data' => '');
     foreach (module_implements('field_form_render') as $module) {
-      $function = $module .'_field_form_render';
+      $function = $module . '_field_form_render';
       $result = $function($form, $field);
       foreach ($result as $key => $value) {
         switch ($key) {
@@ -103,12 +103,11 @@ function theme_editview_node_form(&$variables) {
     $row[] = $cell;
   }
   $buttons = drupal_render($form['actions']['submit']);
-  $buttons .= drupal_render($form['actions']['delete']) .'<div style="display: none;">'. drupal_render_children($form) .'</div>'."\n";
+  $buttons .= drupal_render($form['actions']['delete']) . '<div style="display: none;">' . drupal_render_children($form) . '</div>' . "\n";
   $handler = $view->style_plugin;
   $active = !empty($handler->active) ? $handler->active : '';
   $order = !empty($handler->order) ? $handler->order : 'asc';
   return theme('table', array('header' => $header, 'rows' => array($row), 'attributes' => array('class' => array('editview-row')))) . $buttons;
-  return theme('table', $header, array($row), array('class' => 'editview-row')) . $buttons;
 }
 
 /**
@@ -152,6 +151,12 @@ function editview_field_form_render(&$form, $field) {
  *   A form element or NULL.
  */
 function _editview_form_field(&$elements, $field) {
+  if (substr($field, - 9) === '_editable') {
+    $editable = TRUE;
+    $field = substr($field, 0, strlen($field) - 9);
+  }
+
+
   if (isset($elements[$field])) {
     if ($elements[$field]['#type'] == 'textarea') {
       $elements[$field]['#resizable'] = FALSE;
@@ -184,7 +189,6 @@ function _editview_form_field(&$elements, $field) {
       }
       $header = array(t('Delete'), t('List'), t('Description'));
       $file_list = theme('table', $header, $rows, array('id' => 'upload-attachments'));
-
     }
     unset($elements['attachments']['wrapper']['new']['upload']['#description']);
     $elements['attachments']['wrapper']['new']['upload']['#size'] = 30;
@@ -200,6 +204,10 @@ function _editview_form_field(&$elements, $field) {
   }
 }
 
+
+function get_default_element() {
+
+}
 /**
  * @} End of "addtogroup editview".
  */
