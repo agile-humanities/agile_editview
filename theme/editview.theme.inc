@@ -133,6 +133,9 @@ function editview_field_form_render(&$form, $field) {
           $element['data'] = _editview_form_field($form, $field->content_field['field_name']);
         }
         else {
+          if ($field->field == "body") {
+            $form[$field->field][LANGUAGE_NONE]['0']['format']['#access'] = FALSE;
+          }
           $element['data'] = _editview_form_field($form, $field->field);
         }
       }
