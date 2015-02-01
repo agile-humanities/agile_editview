@@ -48,9 +48,8 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
     if ($variables['row']->nid == 'new') {
       return;
     }
-    $form = drupal_get_form('editview_node_form_' . $variables['row']->nid, $node, $view, $id, $uri);
-    $form = theme('editview_node_form', array('form' => $form, 'view' => $view));
-    //$variables['form'] = drupal_render_children($form);
+    $form = drupal_get_form('editview_node_form_'. $variables['row']->nid, $node, $view, $id, $uri);
+    $form = drupal_render($form);
     $variables['form'] = $form;
   }
 }
@@ -65,7 +64,7 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
  * @ingroup themeable
  */
 function theme_editview_node_form(&$variables) {
-  $view = $variables['view'];
+  $view = $variables['form']['#storage']['view'];
   $header = array();
   $form = $variables['form'];
   $row = array();

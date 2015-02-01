@@ -163,6 +163,9 @@ function editview_node_form($form, &$form_state, $node, $view, $order, $uri) {
   $form['#action'] = $uri;
   $form['#after_build'][] = 'editview_form_after_build_proxy';
 
+  // Add the view into the form so it can be accessed by the theme function.
+  $form['#storage']['view'] = $form_state['build_info']['args'][1];
+
   return $form;
 }
 
