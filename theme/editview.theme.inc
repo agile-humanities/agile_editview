@@ -1,7 +1,4 @@
 <?php
-
-// $Id: editview.theme.inc,v 1.1.2.4 2011/01/23 20:48:54 frodo Exp $
-
 /**
  * @file
  *
@@ -21,7 +18,16 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
   if ($variables['row']->nid == 'new') {
     // Create dummy node for new node form.
     $type = isset($row->node_type) ? $row->node_type : $variables['view']->style_options['editview_node_type'];
-    $node = array('uid' => $variables['user']->uid, 'name' => (isset($variables['user']->name) ? $variables['user']->name : ''), 'type' => $type, 'language' => '');
+    $values = array(
+      'nid' => $variables['row']->nid,
+      'type' => $type,
+      'uid' => $variables['user']->uid,
+      'status' => 1,
+      'comment' => 1,
+      'promote' => 0,
+      'created' => time(),
+    );
+    $node = entity_create('node', $values);
   }
   else {
     // Load full node for node edit form.
@@ -45,10 +51,7 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
     $uri = request_uri();
     $view = $variables['view'];
     $id = $variables['id'];
-    if ($variables['row']->nid == 'new') {
-      return;
-    }
-    $form = drupal_get_form('editview_node_form_'. $variables['row']->nid, $node, $view, $id, $uri);
+    $form = drupal_get_form('editview_node_form_' . $variables['row']->nid, $node, $view, $id, $uri);
     $form = drupal_render($form);
     $variables['form'] = $form;
   }
@@ -64,9 +67,9 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
  * @ingroup themeable
  */
 function theme_editview_node_form(&$variables) {
-  $view = $variables['form']['#storage']['view'];
+  $form = $variables[''];
+  $view = $form['#storage']['view'];;
   $header = array();
-  $form = $variables['form'];
   $row = array();
   // Add selected fields to table as form fields.
   foreach ($view->field as $field) {
@@ -206,10 +209,6 @@ function _editview_form_field(&$elements, $field) {
   }
 }
 
-
-function get_default_element() {
-
-}
 /**
  * @} End of "addtogroup editview".
  */
