@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  *
@@ -68,7 +69,7 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
  */
 function theme_editview_node_form(&$variables) {
   $form = $variables[''];
-  $view = $form['#storage']['view'];;
+  $view = $form['#storage']['view'];
   $header = array();
   $row = array();
   // Add selected fields to table as form fields.
@@ -174,7 +175,17 @@ function _editview_form_field(&$elements, $field) {
         $elements['image']['#size'] = 20;
         return drupal_render($elements['iid']) . drupal_render($elements['image']);
       default:
-        return drupal_render($elements[$field]);
+        $return = drupal_render($elements[$field]);
+        if ($field == 'body') {
+          $dom = new DOMDocument("1.0", "ISO-8859-15");
+          $dom->loadHTML($return);
+          $fieldsets = $dom->getElementsByTagName('fieldset');
+          foreach ($fieldsets as $fieldset) {
+            $fieldset->parentNode->removeChild($fieldset);
+          }
+          $return = $dom->saveHTML();
+        }
+        return $return;
     }
   }
   // Special case for attachments as they don't use consistent naming.
