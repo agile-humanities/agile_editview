@@ -67,8 +67,8 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
  *   An HTML form.
  * @ingroup themeable
  */
-function theme_editview_node_form(&$variables) {
-  $form = $variables[''];
+function theme_editview_custom_node_form(&$variables) {
+  $form = $variables['form'];
   $view = $form['#storage']['view'];
   $header = array();
   $row = array();

@@ -150,15 +150,30 @@ function editview_node_form($form, &$form_state, $node, $view, $order, $uri) {
   // from the form cache. Also, we add a hidden field which will be filled
   // with all ids used in this form. Javascript will get them from the
   // Drupal.settings.
-  $form['editview_view'] = array('#type' => 'hidden', '#value' => $view->name);
-  $form['editview_nid'] = array('#type' => 'hidden', '#value' => $node->nid);
-  $form['editview_order'] = array('#type' => 'hidden', '#value' => $order);
-  $form['editview_uri'] = array('#type' => 'hidden', '#value' => $uri);
-  $form['editview_ids'] = array('#type' => 'hidden', '#default_value' => "");
+  $form['editview_view'] = array(
+    '#type' => 'hidden',
+    '#value' => $view->name,
+  );
+  $form['editview_nid'] = array(
+    '#type' => 'hidden',
+    '#value' => $node->nid,
+  );
+  $form['editview_order'] = array(
+    '#type' => 'hidden',
+    '#value' => $order,
+  );
+  $form['editview_uri'] = array(
+    '#type' => 'hidden',
+    '#value' => $uri,
+  );
+  $form['editview_ids'] = array(
+    '#type' => 'hidden',
+    '#default_value' => "",
+  );
 
   // Other form data. Note the editview_form_after_build callback which
   // will collect all form ids and put them into Drupal.settings.
-  $form['#theme'] = 'editview_node_form';
+  $form['#theme'] = 'editview_custom_node_form';
   $form['#cache'] = TRUE;
   $form['#action'] = $uri;
   $form['#after_build'][] = 'editview_form_after_build_proxy';
