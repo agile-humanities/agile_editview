@@ -22,7 +22,7 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
     $type = strtolower($type);
     $fields = field_info_instances('node', $type);
     $values = array(
-      'title' => t('New @type', array('@type' => $type)),
+      
       'nid' => $variables['row']->nid,
       'type' => $type,
       'uid' => $variables['user']->uid,
