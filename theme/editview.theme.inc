@@ -19,7 +19,10 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
   if ($variables['row']->nid == 'new') {
     // Create dummy node for new node form.
     $type = isset($row->node_type) ? $row->node_type : $variables['view']->style_options['editview_node_type'];
+    $type = strtolower($type);
+    $fields = field_info_instances('node', $type);
     $values = array(
+      'title' => t('New @type', array('@type' => $type)),
       'nid' => $variables['row']->nid,
       'type' => $type,
       'uid' => $variables['user']->uid,
@@ -118,6 +121,7 @@ function theme_editview_custom_node_form(&$variables) {
  */
 function editview_field_form_render(&$form, $field) {
   $element = array('class' => 'editview-field', 'valign' => 'top');
+  $debug_field = $field->field_alias;
   switch ($field->field_alias) {
     case 'og_ancestry_nid':
       $element['data'] = drupal_render($form['og_nodeapi']['visible']['og_groups']);
@@ -219,7 +223,3 @@ function _editview_form_field(&$elements, $field) {
     }
   }
 }
-
-/**
- * @} End of "addtogroup editview".
- */

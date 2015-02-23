@@ -127,7 +127,7 @@ function editview_node_form($form, &$form_state, $node, $view, $order, $uri) {
   $form = node_form($form, $form_state, $node);
   // Let modules alter the node form.
   $form['#method'] = 'post';
-  $type = is_array($node) ? $node['type'] : $node->type;
+  $type = $node->type;
 
 
 

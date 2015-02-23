@@ -120,6 +120,7 @@ class editview_plugin_style_node_add extends views_plugin_style {
         array_push($this->view->result, $node);
       }
     }
+    array_unshift($this->view->result, $node);
     return parent::render();
   }
 
