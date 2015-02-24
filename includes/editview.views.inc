@@ -1,15 +1,10 @@
 <?php
 
-// $Id: editview.views.inc,v 1.1.2.8 2011/01/23 20:48:54 frodo Exp $
-
 /**
  * @file
  * Views functions.
  */
-/**
- * @addtogroup editview
- * @{
- */
+
 /**
  * New node form position: above view results.
  */
@@ -26,7 +21,7 @@ define('EDITVIEW_NEW_BELOW', 1);
 define('EDITVIEW_NEW_NONE', 2);
 
 /**
- * Implementation of hook_views_plugins().
+ * Implements hook_views_plugins().
  */
 function editview_views_plugins() {
   return array(
@@ -259,7 +254,7 @@ function _editview_collect_ids($form, &$ids, $prefix = ".") {
 
   foreach ($form as $key => $value) {
     if (substr($key, 0, 1) != '#' and is_array($value)) {
-      // _editview_collect_ids($value, $ids, $prefix . "/" . $key);
+      _editview_collect_ids($value, $ids, $prefix . "/" . $key);
     }
     elseif ($key == "#id") {
       $ids[$prefix] = $value;
@@ -314,6 +309,3 @@ function _editview_change_ahah($form, $translate) {
   return $form;
 }
 
-/**
- * @} End of "addtogroup editview".
- */

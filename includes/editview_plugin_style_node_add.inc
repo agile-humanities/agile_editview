@@ -1,17 +1,11 @@
 <?php
 
-
-
 /**
  * @file
  * Style plug-in file.
  *
  * This is kept in a separate file and included only when needed to prevent
  * missing class errors.
- */
-/**
- * @addtogroup editview
- * @{
  */
 
 /**
@@ -22,7 +16,7 @@
 class editview_plugin_style_node_add extends views_plugin_style {
 
   /**
-   * Implementation of init().
+   * Implements init().
    */
   function init(&$view, &$display, $options = NULL) {
     $display->handler->set_option('row_plugin', 'editview');
@@ -30,7 +24,7 @@ class editview_plugin_style_node_add extends views_plugin_style {
   }
 
   /**
-   * Implementation of option_definition().
+   * Implements option_definition().
    */
   function option_definition() {
     $options = parent::option_definition();
@@ -40,7 +34,7 @@ class editview_plugin_style_node_add extends views_plugin_style {
   }
 
   /**
-   * Implementation of options_form().
+   * Implements options_form().
    */
   function options_form(&$form, &$form_state) {
     $types = node_type_get_types();
@@ -76,7 +70,7 @@ class editview_plugin_style_node_add extends views_plugin_style {
   }
 
   /**
-   * Implementation of render().
+   * Implements render().
    *
    * Render the view with a new node form.
    */
@@ -92,40 +86,8 @@ class editview_plugin_style_node_add extends views_plugin_style {
       $node->$alias = '';// NULL;
     }
     $node->nid = 'new';
-    if ($this->options['grouping'] == 'type' && !empty($this->view->result)) {
-      // If grouping by node type, add an empty node for each type.
-      foreach ($this->view->result as $row) {
-        $types[$row->node_type] = NULL;
-      }
-      foreach (array_keys($types) as $type) {
-        $node->node_type = $type;
-        if (empty($this->options['editview_node_position'])) {
-          // EDITVIEW_NEW_ABOVE or undefined
-          array_unshift($this->view->result, $node);
-        }
-        elseif ($this->options['editview_node_position'] != EDITVIEW_NEW_NONE) {
-          // EDITVIEW_NEW_BELOW
-          array_push($this->view->result, $node);
-        }
-      }
-    }
-    else {
-      // Otherwise, add one empty node.
-      if (empty($this->options['editview_node_position'])) {
-        // EDITVIEW_NEW_ABOVE or undefined
-        array_unshift($this->view->result, $node);
-      }
-      elseif ($this->options['editview_node_position'] != EDITVIEW_NEW_NONE) {
-        // EDITVIEW_NEW_BELOW
-        array_push($this->view->result, $node);
-      }
-    }
     array_unshift($this->view->result, $node);
     return parent::render();
   }
 
 }
-
-/**
- * @} End of "addtogroup editview".
- */

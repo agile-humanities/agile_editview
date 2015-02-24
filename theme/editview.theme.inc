@@ -22,7 +22,6 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
     $type = strtolower($type);
     $fields = field_info_instances('node', $type);
     $values = array(
-      
       'nid' => $variables['row']->nid,
       'type' => $type,
       'uid' => $variables['user']->uid,
@@ -83,9 +82,15 @@ function theme_editview_custom_node_form(&$variables) {
         continue;
       }
     }
+    $label = $field->label();
+    if ($label == 'Type'){
+      $debig= '';
+    }
+    if (!$label) {
+      $label = t('Title');
+    }
+    $header[] = $label;
 
-    // $header[] = $field->label();
-    $header[] = array("data" => $field->label());
     $classes = array();
     $cell = array('data' => '');
     foreach (module_implements('field_form_render') as $module) {
@@ -162,7 +167,6 @@ function editview_field_form_render(&$form, $field) {
  */
 function _editview_form_field(&$elements, $field) {
   if (substr($field, - 9) === '_editable') {
-    $editable = TRUE;
     $field = substr($field, 0, strlen($field) - 9);
   }
 
