@@ -118,6 +118,7 @@ function editview_js() {
  * @see editview_node_form_delete_submit()
  */
 function editview_node_form($form, &$form_state, $node, $view, $order, $uri) {
+  module_load_include('inc', 'node', 'node.pages');
   // Get the node form
   $form = node_form($form, $form_state, $node);
   // Let modules alter the node form.
