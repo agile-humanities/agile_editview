@@ -117,7 +117,8 @@ function editview_js() {
  *   A node form array.
  */
 function editview_node_form($form, &$form_state, $node, $view, $order, $uri) {
-  // Get the node form.
+  module_load_include('inc', 'node', 'node.pages');
+  // Get the node form
   $form = node_form($form, $form_state, $node);
   // Let modules alter the node form.
   $form['#method'] = 'post';
@@ -301,6 +302,3 @@ function _editview_change_ahah($form, $translate) {
   return $form;
 }
 
-/**
- * @} End of "addtogroup editview".
- */

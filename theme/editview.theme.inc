@@ -20,14 +20,17 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
     // Create dummy node for new node form.
     $type = isset($row->node_type) ? $row->node_type : $variables['view']->style_options['editview_node_type'];
     $type = strtolower($type);
+    if (!$type) {
+      $type = 'article';
+    }
     $fields = field_info_instances('node', $type);
     $values = array(
-      
       'nid' => $variables['row']->nid,
       'type' => $type,
       'uid' => $variables['user']->uid,
       'status' => 1,
       'comment' => 1,
+      'bundle' => $type,
       'promote' => 0,
       'created' => time(),
     );
@@ -83,9 +86,12 @@ function theme_editview_custom_node_form(&$variables) {
         continue;
       }
     }
+    $label = $field->label();
+    if (!$label) {
+      $label = t('Title');
+    }
+    $header[] = $label;
 
-    // $header[] = $field->label();
-    $header[] = array("data" => $field->label());
     $classes = array();
     $cell = array('data' => '');
     foreach (module_implements('field_form_render') as $module) {
@@ -161,11 +167,6 @@ function editview_field_form_render(&$form, $field) {
  *   A form element or NULL.
  */
 function _editview_form_field(&$elements, $field) {
-  if (substr($field, - 9) === '_editable') {
-    $editable = TRUE;
-    $field = substr($field, 0, strlen($field) - 9);
-  }
-
 
   if (isset($elements[$field])) {
     if ($elements[$field]['#type'] == 'textarea') {
