@@ -1,10 +1,4 @@
 <?php
-// $Id: editview.php,v 1.1 2009/02/17 00:39:02 agileware Exp $
-
-/**
- * @defgroup editview Editview
- * Allows users to add and edit nodes in a view.
- */
 
 /**
  * @file
@@ -19,22 +13,18 @@
 /**
  * Get a node form field for a View field.
  *
- * @param $form
+ * @param array $form
  *   A node form array.
- * @param $field
- *   A Views field object.
- * @return
- *   A table cell array. See theme_table() for more information.
+ * @param string $field
+ *   Field name
  *
- * @ingroup hooks
+ * @return array
+ *   A table cell array. See theme_table() for more information.
  */
 function hook_field_form_render(&$form, $field) {
   $element = array('class' => 'editview-field', 'valign' => 'top');
-  switch ($field->field_alias) {
-    default:
-      $element['data'] = _editview_form_field($form, $field->field);
-      break;
-  }
+  $element['data'] = _editview_form_field($form, $field->field);
+
   return $element;
 }
 
@@ -44,6 +34,7 @@ function hook_field_form_render(&$form, $field) {
  * @ingroup themeable
  */
 function theme_editview_view_row_node_edit() {
+
 }
 
 /**

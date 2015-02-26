@@ -1,15 +1,10 @@
 <?php
 
-// $Id: editview.views.inc,v 1.1.2.8 2011/01/23 20:48:54 frodo Exp $
-
 /**
  * @file
  * Views functions.
  */
-/**
- * @addtogroup editview
- * @{
- */
+
 /**
  * New node form position: above view results.
  */
@@ -26,7 +21,7 @@ define('EDITVIEW_NEW_BELOW', 1);
 define('EDITVIEW_NEW_NONE', 2);
 
 /**
- * Implementation of hook_views_plugins().
+ * Implements hook_views_plugins().
  */
 function editview_views_plugins() {
   return array(
@@ -49,7 +44,7 @@ function editview_views_plugins() {
       'editview' => array(
         'title' => t('Editview'),
         'help' => t('Displays a node edit form.'),
-        'handler' => 'editview_plugin_row_node_edit',
+        'handler' => 'Editview_plugin_row_node_edit',
         'path' => drupal_get_path('module', 'editview') . '/includes',
         'theme' => 'editview_view_row_node_edit',
         'theme path' => drupal_get_path('module', 'editview') . '/theme',
@@ -67,23 +62,22 @@ function editview_views_plugins() {
  */
 function editview_js() {
   if (isset($_POST['form_build_id']) && isset($_POST['editview_view'])) {
-    // We are going to need to load nodes
+    // We are going to need to load nodes.
     module_load_include('inc', 'node', 'node.pages');
-
     // Build the view so all necessary classes will be defined.
-    $view = views_get_view($_POST['editview_view']);
+    $view = views_get_view(filter_input(INPUT_POST, 'editview_view'));
     $view->build();
 
     // Fast path is to get the form out of the cache. But if minimum cache
     // lifetimes have been specified, on post of a form all cached forms
     // except the posted one get invalidated. In that case we need to rebuild
     // the form from scratch.
-    $form_build_id = $_POST['form_build_id'];
+    $form_build_id = filter_input(INPUT_POST, 'form_build_id');
     $form_state = array('storage' => NULL, 'submitted' => FALSE);
     $form = form_get_cache($form_build_id, $form_state);
     if (empty($form)) {
-      $node = node_load($_POST["editview_nid"]);
-      $form = drupal_retrieve_form($_POST['form_id'], $form_state, $node, $view, $_POST["editview_order"], $_POST["editview_uri"]);
+      $node = node_load(filter_input(INPUT_POST, 'editview_nid'));
+      $form = drupal_retrieve_form(filter_input(INPUT_POST, 'form_id'), $form_state, $node, $view, filter_input(INPUT_POST, 'editview_order'), filter_input(INPUT_POST, 'editview_uri'));
       $form['#build_id'] = $form_build_id;
       drupal_prepare_form($form_id, $form, $form_state);
     }
@@ -110,32 +104,30 @@ function editview_js() {
 /**
  * Prepare a node form for the view.
  *
- * @param $form_state
+ * @param array $form
+ *   The form  array.
+ * @param array $form_state
  *   The form state array.
- * @param $node
+ * @param Node $node
  *   The node object.
- * @param $view
+ * @param View $view
  *   The view object.
- * @return
+ *
+ * @return array
  *   A node form array.
- * @ingroup forms
- * @see editview_node_form_submit()
- * @see editview_node_form_delete_submit()
  */
 function editview_node_form($form, &$form_state, $node, $view, $order, $uri) {
-  // Get the node form
+  // Get the node form.
   $form = node_form($form, $form_state, $node);
   // Let modules alter the node form.
   $form['#method'] = 'post';
   $type = $node->type;
 
-
-
   // Change save and delete functions.
   $form['actions']['submit']['#submit'] = array('editview_node_form_submit');
   $form['actions']['delete']['#submit'] = array('editview_node_form_delete_submit');
 
-  // Mark the buttons for Javascript handling
+  // Mark the buttons for Javascript handling.
   if (!isset($form['actions']['submit']['#attributes']['class'])) {
     $form['actions']['submit']['#attributes']['class'] = array();
   }
@@ -192,9 +184,9 @@ function editview_node_form($form, &$form_state, $node, $view, $order, $uri) {
 function editview_form_after_build($form, &$form_state) {
   static $ids;
 
-  // Check if we are in a Javascript callback
+  // Check if we are in a Javascript callback.
   if (array_key_exists('HTTP_X_REQUESTED_WITH', $_SERVER) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
-    // This is a Javascript callback, so we try to restore all ids
+    // This is a Javascript callback, so we try to restore all ids.
     if (!isset($ids)) {
       if (array_key_exists('values', $form_state) && array_key_exists('editview_ids', $form_state['values']) && $form_state['values']['editview_ids'] != "") {
         $ids = unserialize(gzuncompress(base64_decode($form_state['values']['editview_ids'])));
@@ -205,12 +197,12 @@ function editview_form_after_build($form, &$form_state) {
     }
   }
   else {
-    // Not javascript, so we save the ids to be picked up
+    // Not javascript, so we save the ids to be picked up.
     $ids = array();
-    // Collect all ids
+    // Collect all ids.
     _editview_collect_ids($form, $ids);
     // Put them into Drupal.settings.editview.ids_NID, but compress them
-    // first to save on bandwidth
+    // first to save on bandwidth.
     $key = "ids_" . $form['editview_nid']['#value'];
     drupal_add_js(array('editview' => array($key => base64_encode(gzcompress(serialize($ids))))), "setting");
   }
@@ -252,14 +244,12 @@ function editview_node_form_delete_submit($form, &$form_state) {
 
 /**
  * Collect all form ids and put them into the $ids array.
- * Each key is constructed as .[/FORMFIELD1[/FORMFIELD2[/FORMFIELD3...]]]
- * Note that this is a recursively called function.
  */
 function _editview_collect_ids($form, &$ids, $prefix = ".") {
 
   foreach ($form as $key => $value) {
     if (substr($key, 0, 1) != '#' and is_array($value)) {
-      // _editview_collect_ids($value, $ids, $prefix . "/" . $key);
+      _editview_collect_ids($value, $ids, $prefix . "/" . $key);
     }
     elseif ($key == "#id") {
       $ids[$prefix] = $value;
@@ -269,7 +259,6 @@ function _editview_collect_ids($form, &$ids, $prefix = ".") {
 
 /**
  * Patch a form to use the old ids as given in the $ids array.
- * Both the ids themselves as the ahah referrals are changed
  */
 function _editview_patch_ids(&$form, $ids) {
   $translate = array();
@@ -279,7 +268,6 @@ function _editview_patch_ids(&$form, $ids) {
 
 /**
  * Patch the ids in a form.
- * Note that this function is recursively called.
  */
 function _editview_change_ids($form, $ids, $prefix, &$translate) {
   foreach ($form as $form_el_name => $form_el_val) {
@@ -298,7 +286,6 @@ function _editview_change_ids($form, $ids, $prefix, &$translate) {
 
 /**
  * Patch the ahah wrapper references in a form based on a translation table.
- * Note that this function is recursively called.
  */
 function _editview_change_ahah($form, $translate) {
   foreach ($form as $form_el_name => $form_el_val) {

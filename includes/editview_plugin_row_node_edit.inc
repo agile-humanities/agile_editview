@@ -7,6 +7,7 @@
  * This is kept in a separate file and included only when needed to prevent
  * missing class errors.
  */
+
 /**
  * @addtogroup editview
  * @{
@@ -17,7 +18,7 @@
  *
  * Fields which are added to the view will be editable.
  */
-class editview_plugin_row_node_edit extends views_plugin_row {
+class Editview_plugin_row_node_edit extends views_plugin_row {
 
   /**
    * Initialize the row plugin.

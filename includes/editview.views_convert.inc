@@ -1,13 +1,11 @@
 <?php
-// $Id: editview.views_convert.inc,v 1.1.2.1 2010/08/17 15:37:19 frodo Exp $
-
 /**
  * @file
  * Style conversion for editable node views.
  */
 
 /**
- * Implementation of hook_views_convert().
+ * Implements hook_views_convert().
  */
 function editview_views_convert($display, $type, &$view, $field) {
   static $displays = array();
