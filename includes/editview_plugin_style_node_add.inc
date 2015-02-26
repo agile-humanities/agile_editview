@@ -89,6 +89,9 @@ class editview_plugin_style_node_add extends views_plugin_style {
       $node->$key = '';
     }
     $node->nid = 'new';
+    if (!isset($this->view->filter['type']) && empty($this->options['editview_node_type'])) {
+      return 'Please select a type for the new node under Editview Settings.';
+    }
     array_unshift($this->view->result, $node);
     return parent::render();
   }
