@@ -78,12 +78,15 @@ class editview_plugin_style_node_add extends views_plugin_style {
     // Create empty node.
     $node = new stdClass();
     // Add empty view fields (needed for grouped views).
-    foreach ($this->view->field as $field) {
+    foreach ($this->view->field as $key => $field) {
       foreach ($field->aliases as $alias) {
         $node->$alias = NULL;
       }
       $alias = $field->field_alias;
       $node->$alias = '';// NULL;
+
+      $key = "field_" . $key;
+      $node->$key = '';
     }
     $node->nid = 'new';
     array_unshift($this->view->result, $node);
