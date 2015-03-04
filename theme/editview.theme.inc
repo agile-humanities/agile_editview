@@ -16,6 +16,7 @@
  *   An array of variables from the theme system.
  */
 function template_preprocess_editview_view_row_node_edit(&$variables) {
+  global $user;
   if ($variables['row']->nid == 'new') {
     // Create dummy node for new node form.
     $type = isset($row->node_type) ? $row->node_type : $variables['view']->style_options['editview_node_type'];

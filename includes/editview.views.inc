@@ -4,7 +4,6 @@
  * @file
  * Views functions.
  */
-
 /**
  * New node form position: above view results.
  */
@@ -34,7 +33,6 @@ function editview_views_plugins() {
         'theme' => 'views_view_unformatted',
         'theme path' => drupal_get_path('module', 'views') . '/theme',
         'theme file' => 'theme.inc',
-        'base' => array('node'),
         'uses options' => TRUE,
         'even empty' => TRUE,
         'type' => 'normal',
@@ -49,7 +47,6 @@ function editview_views_plugins() {
         'theme' => 'editview_view_row_node_edit',
         'theme path' => drupal_get_path('module', 'editview') . '/theme',
         'theme file' => 'editview.theme.inc',
-        'base' => array('node'),
         'uses fields' => TRUE,
         'type' => 'normal',
       ),
@@ -235,15 +232,8 @@ function editview_node_form_submit($form, &$form_state) {
  * Override the node delete redirect.
  */
 function editview_node_form_delete_submit($form, &$form_state) {
-  $uri = request_uri();
-  if ($uri == $form['#parameters'][5]) {
-    node_form_delete_submit($form, $form_state);
-    $form_state['redirect'] = array('node/' . $form_state['values']['nid'] . '/delete', 'destination=' . urlencode($_GET['q']));
-  }
-  else {
-    node_delete($form_state['values']['nid']);
-    $form_state['redirect'] = FALSE;
-  }
+  node_delete($form_state['values']['nid']);
+  $form_state['redirect'] = FALSE;
 }
 
 /**
