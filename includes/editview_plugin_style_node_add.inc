@@ -37,25 +37,27 @@ class editview_plugin_style_node_add extends views_plugin_style {
    * Implements options_form().
    */
   function options_form(&$form, &$form_state) {
-    $types = node_type_get_types();
-    foreach ($types as $type) {
-      $options[$type->name] = $type->name;
+    if ($this->view->base_field == 'nid') {
+      $types = node_type_get_types();
+      foreach ($types as $type) {
+        $options[$type->name] = $type->name;
+      }
+      $form['editview_node_type'] = array(
+        '#type' => 'select',
+        '#title' => t('Node type'),
+        '#default_value' => $this->options['editview_node_type'],
+        '#options' => $options,
+        '#description' => t('Select a node type for the new node form.'),
+        '#required' => TRUE,
+      );
+      $form['editview_node_position'] = array(
+        '#type' => 'radios',
+        '#title' => t('New node position'),
+        '#default_value' => $this->options['editview_node_position'],
+        '#options' => array(t('Above'), t('Below'), t('None')),
+        '#description' => t('Specify whether a new node form should be above or below existing records or not displayed at all.'),
+      );
     }
-    $form['editview_node_type'] = array(
-      '#type' => 'select',
-      '#title' => t('Node type'),
-      '#default_value' => $this->options['editview_node_type'],
-      '#options' => $options,
-      '#description' => t('Select a node type for the new node form.'),
-      '#required' => TRUE,
-    );
-    $form['editview_node_position'] = array(
-      '#type' => 'radios',
-      '#title' => t('New node position'),
-      '#default_value' => $this->options['editview_node_position'],
-      '#options' => array(t('Above'), t('Below'), t('None')),
-      '#description' => t('Specify whether a new node form should be above or below existing records or not displayed at all.'),
-    );
     parent::options_form($form, $form_state);
   }
 
@@ -75,24 +77,25 @@ class editview_plugin_style_node_add extends views_plugin_style {
    * Render the view with a new node form.
    */
   function render() {
-    // Create empty node.
-    $node = new stdClass();
+    $selector = $this->view->base_field;
+    // Create empty object.
+    $object = new stdClass();
     // Add empty view fields (needed for grouped views).
     foreach ($this->view->field as $key => $field) {
       foreach ($field->aliases as $alias) {
-        $node->$alias = NULL;
+        $object->$alias = NULL;
       }
       $alias = $field->field_alias;
-      $node->$alias = '';// NULL;
+      $object->$alias = ''; // NULL;
 
       $key = "field_" . $key;
-      $node->$key = '';
+      $object->$key = '';
     }
-    $node->nid = 'new';
-    if (!isset($this->view->filter['type']) && empty($this->options['editview_node_type'])) {
+    $object->$selector = 'new';
+    if (!isset($this->view->filter['type']) && $selector == 'nid' && empty($this->options['editview_node_type'])) {
       return 'Please select a type for the new node under Editview Settings.';
     }
-    array_unshift($this->view->result, $node);
+    array_unshift($this->view->result, $object);
     return parent::render();
   }
 

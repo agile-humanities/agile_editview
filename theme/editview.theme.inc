@@ -17,6 +17,11 @@
  */
 function template_preprocess_editview_view_row_node_edit(&$variables) {
   global $user;
+  $selector = $variables['view']->base_field;
+  //TOD Build Switch statement for all three object types.
+  if ($selector != 'nid') {
+    return;
+  }
   if ($variables['row']->nid == 'new') {
     // Create dummy node for new node form.
     $type = isset($row->node_type) ? $row->node_type : $variables['view']->style_options['editview_node_type'];
