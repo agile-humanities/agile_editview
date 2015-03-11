@@ -1,6 +1,4 @@
 <?php
-// $Id: editview-view-row-node-edit.tpl.php,v 1.1 2009/02/17 00:39:02 agileware Exp $
-
 /**
  * @file
  * Editview row template.
@@ -18,9 +16,16 @@
  *
  * @see template_preprocess_editview_view_row_node_edit()
  */
+
+if (isset($row->nid)) {
+  $selector = 'nid';
+}
+if (isset($row->tid)) {
+  $selector = 'tid';
+}
 ?>
 <?php if (isset($form)): ?>
-  <div id="editview-node-form-<?php print $row->nid; ?>">
+  <div id="editview-node-form-<?php print $row->$selector; ?>">
     <?php print $form;?>
   </div>
 <?php endif; ?>

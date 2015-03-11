@@ -114,15 +114,22 @@ function editview_js() {
  * @see editview_node_form_submit()
  * @see editview_node_form_delete_submit()
  */
-function editview_node_form($form, &$form_state, $node, $view, $order, $uri) {
+function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $selector) {
   module_load_include('inc', 'node', 'node.pages');
+  module_load_include('inc', 'taxonomy', 'taxonomy.admin');
   // Get the node form
-  $form = node_form($form, $form_state, $node);
+  if ($selector == 'nid') {
+    $form = node_form($form, $form_state, $node);
+  }
+  if ($selector == 'tid') {
+    $form = taxonomy_form_term($form, $form_state, $object);
+  }
+
   // Let modules alter the node form.
   $form['#method'] = 'post';
-  $type = $node->type;
-
-
+  if (isset($object->type)) {
+    $type = $object->type;
+  }
 
   // Change save and delete functions.
   $form['actions']['submit']['#submit'] = array('editview_node_form_submit');
@@ -149,7 +156,7 @@ function editview_node_form($form, &$form_state, $node, $view, $order, $uri) {
   );
   $form['editview_nid'] = array(
     '#type' => 'hidden',
-    '#value' => $node->nid,
+    '#value' => $object->$selector,
   );
   $form['editview_order'] = array(
     '#type' => 'hidden',
