@@ -119,7 +119,7 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
   module_load_include('inc', 'taxonomy', 'taxonomy.admin');
   // Get the node form
   if ($selector == 'nid') {
-    $form = node_form($form, $form_state, $node);
+    $form = node_form($form, $form_state, $object);
   }
   if ($selector == 'tid') {
     $form = taxonomy_form_term($form, $form_state, $object);

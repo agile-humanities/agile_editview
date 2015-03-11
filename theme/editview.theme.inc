@@ -226,7 +226,7 @@ function _editview_form_field(&$elements, $field) {
   }
 }
 
-function editviews_build_node($new, $nid, $type) {
+function editviews_build_node($nid, $type) {
   global $user;
   if ($nid == 'new') {
     // Create dummy node for new node form.
