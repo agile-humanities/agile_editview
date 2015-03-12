@@ -16,32 +16,33 @@
  *   An array of variables from the theme system.
  */
 function template_preprocess_editview_view_row_node_edit(&$variables) {
-  if ($variables['row']->nid == 'new') {
-    // Create dummy node for new node form.
+  global $user;
+  $selector = $variables['view']->base_field;
+  //TODO Build Switch statement for all three object types.
+
+  if ($selector == 'nid') {
     $type = isset($row->node_type) ? $row->node_type : $variables['view']->style_options['editview_node_type'];
     $type = strtolower($type);
     if (!$type) {
-      $type = 'article';
+      $type = 'body';
     }
-    $fields = field_info_instances('node', $type);
-    $values = array(
-      'nid' => $variables['row']->nid,
-      'type' => $type,
-      'uid' => $variables['user']->uid,
-      'status' => 1,
-      'comment' => 1,
-      'bundle' => $type,
-      'promote' => 0,
-      'created' => time(),
-    );
-    $node = entity_create('node', $values);
+    $nid = $variables['row']->nid;
+    $object = editviews_build_node($nid, $type);
+    if (isset($object->nid) && node_access('update', $object) || !isset($object->nid) && node_access('create', $type)) {
+      $valid = TRUE;
+    }
   }
-  else {
-    // Load full node for node edit form.
-    $node = node_load($variables['row']->nid);
+  if ($selector == 'tid') {
+    $tid = $variables['row']->tid;
+    $name = $variables['row']->taxonomy_term_data_name;
+    $vid = $variables['row']->taxonomy_term_data_vid;
+    $object = editviews_build_term($name, $vid, $tid);
+    $valid = TRUE;
   }
+
+
   // Check user permissions.
-  if (isset($node->nid) && node_access('update', $node) || !isset($node->nid) && node_access('create', $type)) {
+  if ($valid) {
     /* This function runs once for each row, so prevent page set-up functions
      * from being repeated.
      */
@@ -58,7 +59,7 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
     $uri = request_uri();
     $view = $variables['view'];
     $id = $variables['id'];
-    $form = drupal_get_form('editview_node_form_' . $variables['row']->nid, $node, $view, $id, $uri);
+    $form = drupal_get_form('editview_node_form_' . $variables['row']->$selector, $object, $view, $id, $uri, $selector);
     $form = drupal_render($form);
     $variables['form'] = $form;
   }
@@ -181,7 +182,7 @@ function _editview_form_field(&$elements, $field) {
         return drupal_render($elements['iid']) . drupal_render($elements['image']);
       default:
         $return = drupal_render($elements[$field]);
-        if ($field == 'body') {
+        if ($field == 'body' || $field == 'description') {
           $dom = new DOMDocument("1.0", "ISO-8859-15");
           $dom->loadHTML($return);
           $fieldsets = $dom->getElementsByTagName('fieldset');
@@ -190,7 +191,7 @@ function _editview_form_field(&$elements, $field) {
           }
           $return = $dom->saveHTML();
         }
-        return $return;
+        return $return ? $return : $elements[$field]['#value'];
     }
   }
   // Special case for attachments as they don't use consistent naming.
@@ -223,4 +224,41 @@ function _editview_form_field(&$elements, $field) {
       }
     }
   }
+}
+
+function editviews_build_node($nid, $type) {
+  global $user;
+  if ($nid == 'new') {
+    // Create dummy node for new node form.
+    $fields = field_info_instances('node', $type);
+    $values = array(
+      'nid' => $nid,
+      'type' => $type,
+      'uid' => $user->uid,
+      'status' => 1,
+      'comment' => 1,
+      'bundle' => $type,
+      'promote' => 0,
+      'created' => time(),
+    );
+    $node = entity_create('node', $values);
+  }
+  else {
+    // Load full node for node edit form.
+    $node = node_load($nid);
+  }
+  return $node;
+}
+
+function editviews_build_term($name, $vid, $tid) {
+  if ($tid == 'new') {
+    $term = array();
+    $term['name'] = $name;
+    $term['vid'] = 1;
+    $term = entity_create('taxonomy_term', $term);
+  }
+  else {
+    $term = taxonomy_term_load($tid);
+  }
+  return $term;
 }

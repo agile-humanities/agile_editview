@@ -4,7 +4,6 @@
  * @file
  * Views functions.
  */
-
 /**
  * New node form position: above view results.
  */
@@ -34,7 +33,6 @@ function editview_views_plugins() {
         'theme' => 'views_view_unformatted',
         'theme path' => drupal_get_path('module', 'views') . '/theme',
         'theme file' => 'theme.inc',
-        'base' => array('node'),
         'uses options' => TRUE,
         'even empty' => TRUE,
         'type' => 'normal',
@@ -49,7 +47,6 @@ function editview_views_plugins() {
         'theme' => 'editview_view_row_node_edit',
         'theme path' => drupal_get_path('module', 'editview') . '/theme',
         'theme file' => 'editview.theme.inc',
-        'base' => array('node'),
         'uses fields' => TRUE,
         'type' => 'normal',
       ),
@@ -116,13 +113,26 @@ function editview_js() {
  * @return array
  *   A node form array.
  */
-function editview_node_form($form, &$form_state, $node, $view, $order, $uri) {
+function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $selector) {
   module_load_include('inc', 'node', 'node.pages');
+  module_load_include('inc', 'taxonomy', 'taxonomy.admin');
   // Get the node form
-  $form = node_form($form, $form_state, $node);
+  if ($selector == 'nid') {
+    $form = node_form($form, $form_state, $object);
+  }
+  if ($selector == 'tid') {
+    $form = taxonomy_form_term($form, $form_state, $object);
+  }
+
   // Let modules alter the node form.
   $form['#method'] = 'post';
+<<<<<<< HEAD
   $type = $node->type;
+=======
+  if (isset($object->type)) {
+    $type = $object->type;
+  }
+>>>>>>> 38b81fb727338a49968d4d7489ca7d5c3ab98452
 
   // Change save and delete functions.
   $form['actions']['submit']['#submit'] = array('editview_node_form_submit');
@@ -149,7 +159,7 @@ function editview_node_form($form, &$form_state, $node, $view, $order, $uri) {
   );
   $form['editview_nid'] = array(
     '#type' => 'hidden',
-    '#value' => $node->nid,
+    '#value' => $object->$selector,
   );
   $form['editview_order'] = array(
     '#type' => 'hidden',
@@ -218,7 +228,13 @@ function editview_form_after_build($form, &$form_state) {
  */
 function editview_node_form_submit($form, &$form_state) {
   $uri = request_uri();
-  node_form_submit($form, $form_state);
+  if ($form['#entity_type'] == 'taxonomy_term') {
+    taxonomy_form_term_submit($form, $form_state);
+  }
+  if ($form['#entity_type'] == 'node') {
+    node_form_submit($form, $form_state);
+
+  }
   if ($uri == $form['#parameters'][5] || !isset($form['#parameters'][2]->nid)) {
     global $base_root;
     $form_state['redirect'] = $base_root . $uri;
@@ -232,15 +248,8 @@ function editview_node_form_submit($form, &$form_state) {
  * Override the node delete redirect.
  */
 function editview_node_form_delete_submit($form, &$form_state) {
-  $uri = request_uri();
-  if ($uri == $form['#parameters'][5]) {
-    node_form_delete_submit($form, $form_state);
-    $form_state['redirect'] = array('node/' . $form_state['values']['nid'] . '/delete', 'destination=' . urlencode($_GET['q']));
-  }
-  else {
-    node_delete($form_state['values']['nid']);
-    $form_state['redirect'] = FALSE;
-  }
+  node_delete($form_state['values']['nid']);
+  $form_state['redirect'] = FALSE;
 }
 
 /**
