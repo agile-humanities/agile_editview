@@ -163,7 +163,7 @@ function editview_field_form_render(&$form, $field) {
  *
  * @param array $elements
  *   An array of form elements.
- * @param $field
+ * @param string $field
  *   A field name string.
  *
  * @return mixed
@@ -182,6 +182,7 @@ function _editview_form_field(&$elements, $field) {
         unset($elements['iid']['#description']);
         $elements['image']['#size'] = 20;
         return drupal_render($elements['iid']) . drupal_render($elements['image']);
+
       default:
         $return = drupal_render($elements[$field]);
         if ($field == 'body' || $field == 'description') {
@@ -197,7 +198,7 @@ function _editview_form_field(&$elements, $field) {
     }
   }
   // Special case for attachments as they don't use consistent naming.
-  else if ($field == 'upload_fid') {
+  elseif ($field == 'upload_fid') {
     $file_list = '';
     if ($elements['attachments']['wrapper']['files']) {
       $files = array();
@@ -233,7 +234,7 @@ function _editview_form_field(&$elements, $field) {
  *
  * @param int $nid
  *   Node identifier
- * @param string $typr
+ * @param string $type
  *   Node type
  *
  * @return Node
