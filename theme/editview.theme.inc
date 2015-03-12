@@ -252,10 +252,10 @@ function editviews_build_node($nid, $type) {
 
 function editviews_build_term($name, $vid, $tid) {
   if ($tid == 'new') {
-    $term = new stdClass();
-    $term->name = $name;
-    $term->vid = 1;
-    //taxonomy_term_save($term);
+    $term = array();
+    $term['name'] = $name;
+    $term['vid'] = 1;
+    $term = entity_create('taxonomy_term', $term);
   }
   else {
     $term = taxonomy_term_load($tid);

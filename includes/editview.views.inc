@@ -225,7 +225,13 @@ function editview_form_after_build($form, &$form_state) {
  */
 function editview_node_form_submit($form, &$form_state) {
   $uri = request_uri();
-  node_form_submit($form, $form_state);
+  if ($form['#entity_type'] == 'taxonomy_term') {
+    taxonomy_form_term_submit($form, $form_state);
+  }
+  if ($form['#entity_type'] == 'node') {
+    node_form_submit($form, $form_state);
+
+  }
   if ($uri == $form['#parameters'][5] || !isset($form['#parameters'][2]->nid)) {
     global $base_root;
     $form_state['redirect'] = $base_root . $uri;
