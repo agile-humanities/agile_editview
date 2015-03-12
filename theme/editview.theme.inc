@@ -254,7 +254,7 @@ function editviews_build_term($name, $vid, $tid) {
   if ($tid == 'new') {
     $term = new stdClass();
     $term->name = $name;
-    $term->vid = $vid;
+    $term->vid = 1;
     taxonomy_term_save($term);
   }
   else {
