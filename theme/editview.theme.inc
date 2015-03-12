@@ -2,23 +2,18 @@
 
 /**
  * @file
- *
- */
-/**
- * @addtogroup editview
- * @{
+ * Editview theme functions.
  */
 
 /**
  * Prepare variables for the editview row template.
  *
- * @param $variables
+ * @param array $variables
  *   An array of variables from the theme system.
  */
 function template_preprocess_editview_view_row_node_edit(&$variables) {
   global $user;
   $selector = $variables['view']->base_field;
-  //TODO Build Switch statement for all three object types.
 
   if ($selector == 'nid') {
     $type = isset($row->node_type) ? $row->node_type : $variables['view']->style_options['editview_node_type'];
@@ -39,7 +34,6 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
     $object = editviews_build_term($name, $vid, $tid);
     $valid = TRUE;
   }
-
 
   // Check user permissions.
   if ($valid) {
@@ -68,11 +62,11 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
 /**
  * Display selected fields from the node form in a table.
  *
- * @param $form
- *   A node form array.
- * @return
+ * @param array $variables
+ *   Inputs
+ *
+ * @return array
  *   An HTML form.
- * @ingroup themeable
  */
 function theme_editview_custom_node_form(&$variables) {
   $form = $variables['form'];
@@ -81,7 +75,7 @@ function theme_editview_custom_node_form(&$variables) {
   $row = array();
   // Add selected fields to table as form fields.
   foreach ($view->field as $field) {
-    // If auto_nodetitle module is enabled and the title field is to be overridden don't display it.
+    // Don't display title field if overidden by autonodetitle.
     if (module_exists('auto_nodetitle') && $field->real_field == 'title') {
       if (auto_nodetitle_get_setting($form['#node']->type) == AUTO_NODETITLE_ENABLED) {
         continue;
@@ -103,9 +97,11 @@ function theme_editview_custom_node_form(&$variables) {
           case 'data':
             $cell['data'] .= $value;
             break;
+
           case 'class':
             $classes[] = $value;
             break;
+
           default:
             $cell[$key] = $value;
             break;
@@ -120,11 +116,14 @@ function theme_editview_custom_node_form(&$variables) {
   $handler = $view->style_plugin;
   $active = !empty($handler->active) ? $handler->active : '';
   $order = !empty($handler->order) ? $handler->order : 'asc';
-  return theme('table', array('header' => $header, 'rows' => array($row), 'attributes' => array('class' => array('editview-row')))) . $buttons;
+  return theme('table', array(
+        'header' => $header,
+        'rows' => array($row),
+        'attributes' => array('class' => array('editview-row')))) . $buttons;
 }
 
 /**
- * Implementation of hook_field_form_render().
+ * Implements hook_field_form_render().
  */
 function editview_field_form_render(&$form, $field) {
   $element = array('class' => 'editview-field', 'valign' => 'top');
@@ -133,9 +132,11 @@ function editview_field_form_render(&$form, $field) {
     case 'og_ancestry_nid':
       $element['data'] = drupal_render($form['og_nodeapi']['visible']['og_groups']);
       break;
+
     case 'og_og_private':
       $element['data'] = drupal_render($form['og_nodeapi']['visible']['og_public']);
       break;
+
     default:
       if (isset($field->table_alias) && is_numeric($vocab_id = str_replace('term_node_', '', $field->table_alias))) {
         $element['data'] = drupal_render($form['taxonomy'][$vocab_id]);
@@ -160,11 +161,12 @@ function editview_field_form_render(&$form, $field) {
 /**
  * Find fields in form.
  *
- * @param $elements
+ * @param array $elements
  *   An array of form elements.
  * @param $field
  *   A field name string.
- * @return
+ *
+ * @return mixed
  *   A form element or NULL.
  */
 function _editview_form_field(&$elements, $field) {
@@ -226,6 +228,17 @@ function _editview_form_field(&$elements, $field) {
   }
 }
 
+/**
+ * Builds node.
+ *
+ * @param int $nid
+ *   Node identifier
+ * @param string $typr
+ *   Node type
+ *
+ * @return Node
+ *   New or existing node
+ */
 function editviews_build_node($nid, $type) {
   global $user;
   if ($nid == 'new') {
@@ -250,6 +263,19 @@ function editviews_build_node($nid, $type) {
   return $node;
 }
 
+/**
+ * Builds term.
+ *
+ * @param string $name
+ *   Term name
+ * @param int $vid
+ *   Vocabulary identifier
+ * @param int $tid
+ *   Term identifier
+ *
+ * @return term
+ *   New or existing term
+ */
 function editviews_build_term($name, $vid, $tid) {
   if ($tid == 'new') {
     $term = array();

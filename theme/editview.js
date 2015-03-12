@@ -1,5 +1,7 @@
-// $Id: editview.js,v 1.1.2.5 2010/11/10 19:04:30 frodo Exp $
-
+/**
+ * @file
+ * Custom javascript.
+ */
 Drupal.behaviors.editview = function (context) {
   $('form', context).each(Editview.formCapture);
 };

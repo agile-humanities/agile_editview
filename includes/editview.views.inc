@@ -4,9 +4,11 @@
  * @file
  * Views functions.
  */
+
 /**
  * New node form position: above view results.
  */
+
 define('EDITVIEW_NEW_ABOVE', 0);
 
 /**
@@ -105,8 +107,8 @@ function editview_js() {
  *   The form  array.
  * @param array $form_state
  *   The form state array.
- * @param Node $node
- *   The node object.
+ * @param stClass $object
+ *   The object.
  * @param View $view
  *   The view object.
  *
@@ -116,7 +118,7 @@ function editview_js() {
 function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $selector) {
   module_load_include('inc', 'node', 'node.pages');
   module_load_include('inc', 'taxonomy', 'taxonomy.admin');
-  // Get the node form
+  // Get the node form.
   if ($selector == 'nid') {
     $form = node_form($form, $form_state, $object);
   }
@@ -126,13 +128,9 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
 
   // Let modules alter the node form.
   $form['#method'] = 'post';
-<<<<<<< HEAD
-  $type = $node->type;
-=======
   if (isset($object->type)) {
     $type = $object->type;
   }
->>>>>>> 38b81fb727338a49968d4d7489ca7d5c3ab98452
 
   // Change save and delete functions.
   $form['actions']['submit']['#submit'] = array('editview_node_form_submit');
@@ -310,4 +308,3 @@ function _editview_change_ahah($form, $translate) {
   }
   return $form;
 }
-
