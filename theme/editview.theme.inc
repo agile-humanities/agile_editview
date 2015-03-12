@@ -182,7 +182,7 @@ function _editview_form_field(&$elements, $field) {
         return drupal_render($elements['iid']) . drupal_render($elements['image']);
       default:
         $return = drupal_render($elements[$field]);
-        if ($field == 'body') {
+        if ($field == 'body' || $field == 'description') {
           $dom = new DOMDocument("1.0", "ISO-8859-15");
           $dom->loadHTML($return);
           $fieldsets = $dom->getElementsByTagName('fieldset');
@@ -191,7 +191,7 @@ function _editview_form_field(&$elements, $field) {
           }
           $return = $dom->saveHTML();
         }
-        return $return;
+        return $return ? $return : $elements[$field]['#value'];
     }
   }
   // Special case for attachments as they don't use consistent naming.
@@ -255,7 +255,7 @@ function editviews_build_term($name, $vid, $tid) {
     $term = new stdClass();
     $term->name = $name;
     $term->vid = 1;
-    taxonomy_term_save($term);
+    //taxonomy_term_save($term);
   }
   else {
     $term = taxonomy_term_load($tid);
