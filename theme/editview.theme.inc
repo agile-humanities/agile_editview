@@ -30,7 +30,7 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
   if ($selector == 'tid') {
     $tid = $variables['row']->tid;
     $name = $variables['row']->taxonomy_term_data_name;
-    $vid = $variables['row']->taxonomy_term_data_vid;
+    $vid = $tid == 'new' ? $variables['view']->style_options['editview_vocab_vid'] : $variables['row']->taxonomy_term_data_vid;
     $object = editviews_build_term($name, $vid, $tid);
     $valid = TRUE;
   }
@@ -186,13 +186,15 @@ function _editview_form_field(&$elements, $field) {
       default:
         $return = drupal_render($elements[$field]);
         if ($field == 'body' || $field == 'description') {
-          $dom = new DOMDocument("1.0", "ISO-8859-15");
-          $dom->loadHTML($return);
-          $fieldsets = $dom->getElementsByTagName('fieldset');
-          foreach ($fieldsets as $fieldset) {
-            $fieldset->parentNode->removeChild($fieldset);
+          if ($return) {
+            $dom = new DOMDocument("1.0", "ISO-8859-15");
+            $dom->loadHTML($return);
+            $fieldsets = $dom->getElementsByTagName('fieldset');
+            foreach ($fieldsets as $fieldset) {
+              $fieldset->parentNode->removeChild($fieldset);
+            }
+            $return = $dom->saveHTML();
           }
-          $return = $dom->saveHTML();
         }
         if (!$return && isset($elements[$field]['#value'])) {
           $return = $elements[$field]['#value'];
@@ -284,7 +286,7 @@ function editviews_build_term($name, $vid, $tid) {
   if ($tid == 'new') {
     $term = array();
     $term['name'] = $name;
-    $term['vid'] = 1;
+    $term['vid'] = $vid;
     $term = entity_create('taxonomy_term', $term);
   }
   else {

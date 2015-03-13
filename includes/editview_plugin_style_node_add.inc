@@ -37,7 +37,7 @@ class editview_plugin_style_node_add extends views_plugin_style {
    * Implements options_form().
    */
   function options_form(&$form, &$form_state) {
-    if ($this->view->base_field == 'nid') {
+    if ($this->view->base_table == 'node') {
       $types = node_type_get_types();
       foreach ($types as $type) {
         $options[$type->name] = $type->name;
@@ -56,6 +56,20 @@ class editview_plugin_style_node_add extends views_plugin_style {
         '#default_value' => $this->options['editview_node_position'],
         '#options' => array(t('Above'), t('Below'), t('None')),
         '#description' => t('Specify whether a new node form should be above or below existing records or not displayed at all.'),
+      );
+    }
+    if ($this->view->base_table == 'taxonomy_term_data') {
+      $types = taxonomy_get_vocabularies();
+      foreach ($types as $type) {
+        $options[$type->vid] = $type->name;
+      }
+      $form['editview_vocab_vid'] = array(
+        '#type' => 'select',
+        '#title' => t('Term type'),
+        '#default_value' => $this->options['editview_node_type'],
+        '#options' => $options,
+        '#description' => t('Select a vocabulary type for the new term form.'),
+        '#required' => TRUE,
       );
     }
     parent::options_form($form, $form_state);
@@ -100,3 +114,4 @@ class editview_plugin_style_node_add extends views_plugin_style {
   }
 
 }
+
