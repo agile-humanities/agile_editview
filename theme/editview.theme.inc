@@ -194,7 +194,10 @@ function _editview_form_field(&$elements, $field) {
           }
           $return = $dom->saveHTML();
         }
-        return $return ? $return : $elements[$field]['#value'];
+        if (!$return && isset($elements[$field]['#value'])) {
+          $return = $elements[$field]['#value'];
+        }
+        return $return;
     }
   }
   // Special case for attachments as they don't use consistent naming.

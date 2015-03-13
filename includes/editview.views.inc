@@ -4,11 +4,9 @@
  * @file
  * Views functions.
  */
-
 /**
  * New node form position: above view results.
  */
-
 define('EDITVIEW_NEW_ABOVE', 0);
 
 /**
@@ -231,7 +229,6 @@ function editview_node_form_submit($form, &$form_state) {
   }
   if ($form['#entity_type'] == 'node') {
     node_form_submit($form, $form_state);
-
   }
   if ($uri == $form['#parameters'][5] || !isset($form['#parameters'][2]->nid)) {
     global $base_root;

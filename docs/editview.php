@@ -4,7 +4,6 @@
  * @file
  * Editview API documentation.
  */
-
 /**
  * @addtogroup editview
  * @{

@@ -2,7 +2,7 @@
  * @file
  * Custom javascript.
  */
-Drupal.behaviors.editview = function (context) {
+Drupal.behaviors.editview = function(context) {
   $('form', context).each(Editview.formCapture);
 };
 
@@ -25,7 +25,7 @@ var Editview = Editview || {
               name = form_values[i].value;
             }
           }
-          if (deleted && !confirm(Drupal.t('Are you sure you want to delete @name?', {'@name': name}) +"\n"+ Drupal.t('This action cannot be undone.'))) {
+          if (deleted && !confirm(Drupal.t('Are you sure you want to delete @name?', {'@name': name}) + "\n" + Drupal.t('This action cannot be undone.'))) {
             return false;
           }
           var wrapper = $(form).parent();
@@ -42,12 +42,12 @@ var Editview = Editview || {
         dataType: 'json',
         type: 'POST'
       }
-      $('input[class~=editview-button]',form).click(function(e) {
-	form.clk = e.target;
+      $('input[class~=editview-button]', form).click(function(e) {
+        form.clk = e.target;
         $(form).ajaxSubmit(options);
         return false;
       })
-      $('[name=editview_ids]',form).val(Drupal.settings.editview['ids_' + $('[name=editview_nid]',form).val()])
+      $('[name=editview_ids]', form).val(Drupal.settings.editview['ids_' + $('[name=editview_nid]', form).val()])
     }
   }
 };

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Style conversion for editable node views.

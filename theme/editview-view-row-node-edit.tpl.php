@@ -16,7 +16,6 @@
  *
  * @see template_preprocess_editview_view_row_node_edit()
  */
-
 if (isset($row->nid)) {
   $selector = 'nid';
 }
@@ -26,6 +25,6 @@ if (isset($row->tid)) {
 ?>
 <?php if (isset($form)): ?>
   <div id="editview-node-form-<?php print $row->$selector; ?>">
-    <?php print $form;?>
+    <?php print $form; ?>
   </div>
 <?php endif; ?>

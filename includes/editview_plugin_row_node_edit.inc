@@ -7,7 +7,6 @@
  * This is kept in a separate file and included only when needed to prevent
  * missing class errors.
  */
-
 /**
  * @addtogroup editview
  * @{
