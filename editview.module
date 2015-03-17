@@ -59,13 +59,13 @@ function editview_help($path, $arg) {
           t('<li>Create <em>organisation</em> as a cck node type, giving it whatever fields you like.</li>') .
           t('<li>Create <em>employee</em> as a ckk node type. One of its fields should be a node reference which you should limit to only be able to access nodes of type <em>organisation</em>. Make sure the node reference is a select list, not an auto-complete text field. We will be relying on not having to enter the reference manually.</li>') .
           t('<li>For the node reference field, specify the following code for its default value:') .
-          "<pre>if (arg(0) == 'node' && is_numeric(arg(1))) {
+          '<pre>if (arg(0) == \'node\' && is_numeric(arg(1))) {
   $organisation = node_load(arg(1));
-  if ($organisation-&gt;type == 'organisation') {
-    return array(0 => array('nid' =&gt; $organisation-&gt;nid));
+  if ($organisation-&gt;type == \'organisation\') {
+    return array(0 => array(\'nid\' =&gt; $organisation-&gt;nid));
   }
 }
-return array(array());</pre>" .
+return array(array());</pre>' .
           t('<li>At this point you may want to create a few test organisations and assign each one a few employees.</li>') .
           t('</ol></li>') .
           t('<li>Create a new node view, giving it a name and setting its <em>View type</em> to <em>node</em>:</li>') .
