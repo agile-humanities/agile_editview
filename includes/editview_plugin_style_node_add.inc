@@ -82,7 +82,7 @@ class editview_plugin_style_node_add extends views_plugin_style {
    * specifying that we use a row plug-in in our style definition.
    */
   function uses_row_plugin() {
-    return TRUE;
+    return $_GET['q'] != 'system/ajax';
   }
 
   /**

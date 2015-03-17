@@ -16,10 +16,13 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
   $selector = $variables['view']->base_field;
 
   if ($selector == 'nid') {
+    if (!isset($variables['view']->style_options['editview_node_type'])) {
+      $variables['view']->style_options['editview_node_type'] = 'article';
+    }
     $type = isset($row->node_type) ? $row->node_type : $variables['view']->style_options['editview_node_type'];
     $type = strtolower($type);
     if (!$type) {
-      $type = 'body';
+      $type = 'article';
     }
     $nid = $variables['row']->nid;
     $object = editviews_build_node($nid, $type);
