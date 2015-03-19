@@ -14,7 +14,7 @@
 function template_preprocess_editview_view_row_node_edit(&$variables) {
   global $user;
   $selector = $variables['view']->base_field;
-
+  $valid = FALSE;
   if ($selector == 'nid') {
     if (!isset($variables['view']->style_options['editview_node_type'])) {
       $variables['view']->style_options['editview_node_type'] = 'article';
@@ -32,12 +32,20 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
   }
   if ($selector == 'tid') {
     $tid = $variables['row']->tid;
+    if (!isset($variables['view']->style_options['editview_vocab_vid'])) {
+      $variables['view']->style_options['editview_vocab_vid'] = 1;
+    }
     $name = $variables['row']->taxonomy_term_data_name;
     $vid = $tid == 'new' ? $variables['view']->style_options['editview_vocab_vid'] : $variables['row']->taxonomy_term_data_vid;
     $object = editviews_build_term($name, $vid, $tid);
     $valid = TRUE;
   }
 
+  if ($selector == 'uid') {
+    $uid = $variables['row']->uid;
+    $object = editviews_build_user($uid);
+    $valid = TRUE;
+  }
   // Check user permissions.
   if ($valid) {
     /* This function runs once for each row, so prevent page set-up functions
@@ -296,4 +304,16 @@ function editviews_build_term($name, $vid, $tid) {
     $term = taxonomy_term_load($tid);
   }
   return $term;
+}
+
+function editviews_build_user($uid) {
+  if ($uid == 'new') {
+    $user = array();
+    $user['uid'] = $uid;
+    $user = entity_create('user', $user);
+  }
+  else {
+    $user = user_load($uid);
+  }
+  return $user;
 }

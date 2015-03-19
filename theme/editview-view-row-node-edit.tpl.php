@@ -22,6 +22,9 @@ if (isset($row->nid)) {
 if (isset($row->tid)) {
   $selector = 'tid';
 }
+if (isset($row->uid)) {
+  $selector = 'uid';
+}
 ?>
 <?php if (isset($form)): ?>
   <div id="editview-node-form-<?php print $row->$selector; ?>">
