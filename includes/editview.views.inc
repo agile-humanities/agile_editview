@@ -116,6 +116,7 @@ function editview_js() {
 function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $selector) {
   module_load_include('inc', 'node', 'node.pages');
   module_load_include('inc', 'taxonomy', 'taxonomy.admin');
+  module_load_include('inc', 'user', 'user.pages');
   // Get the node form.
   if ($selector == 'nid') {
     $form = node_form($form, $form_state, $object);
@@ -123,7 +124,9 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
   if ($selector == 'tid') {
     $form = taxonomy_form_term($form, $form_state, $object);
   }
-
+  if ($selector == 'uid') {
+    $form = user_profile_form($form, $form_state, $object);
+  }
   // Let modules alter the node form.
   $form['#method'] = 'post';
   if (isset($object->type)) {
@@ -230,6 +233,9 @@ function editview_node_form_submit($form, &$form_state) {
   if ($form['#entity_type'] == 'node') {
     node_form_submit($form, $form_state);
   }
+  if ($form['#entity_type'] == 'user') {
+    user_profile_form_submit($form, $form_state);
+  }
   if ($uri == $form['#parameters'][5] || !isset($form['#parameters'][2]->nid)) {
     global $base_root;
     $form_state['redirect'] = $base_root . $uri;
@@ -243,7 +249,15 @@ function editview_node_form_submit($form, &$form_state) {
  * Override the node delete redirect.
  */
 function editview_node_form_delete_submit($form, &$form_state) {
-  node_delete($form_state['values']['nid']);
+  if (isset($form_state['values']['nid'])) {
+    node_delete($form_state['values']['nid']);
+  }
+  if (isset($form_state['values']['tid'])) {
+    taxonomy_term_delete($form_state['values']['tid']);
+  }
+  if (isset($form_state['values']['uid'])) {
+    user_delete($form_state['values']['uid']);
+  }
   $form_state['redirect'] = FALSE;
 }
 
