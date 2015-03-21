@@ -55,7 +55,6 @@ table {
   margin: 0px !important;
 }
 
-/* Horizontal Scrolling */
-div[id^="editview-node-form-"], div[id*="editview-node-form-"] {
-    overflow-x: scroll;
+.editview-field .form-item .form-textarea-wrapper {
+    min-width: 200px;
 }
