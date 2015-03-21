@@ -182,6 +182,8 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
 
   // Add the view into the form so it can be accessed by the theme function.
   $form['#storage']['view'] = $form_state['build_info']['args'][1];
+  // And add the object.
+  $form['#storage']['entity'] = $object;
 
   return $form;
 }

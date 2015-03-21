@@ -243,6 +243,12 @@ function _editview_form_field(&$elements, $field) {
       }
     }
   }
+  if (isset($elements['#storage']['entity'])) {
+    $object = $elements['#storage']['entity'];
+    if (isset($object->$field)) {
+      return $object->$field;
+    }
+  }
 }
 
 /**
