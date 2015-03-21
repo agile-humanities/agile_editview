@@ -271,6 +271,7 @@ function editviews_build_node($nid, $type) {
       'nid' => $nid,
       'type' => $type,
       'uid' => $user->uid,
+      'name' => $user->name,
       'status' => 1,
       'comment' => 1,
       'bundle' => $type,
