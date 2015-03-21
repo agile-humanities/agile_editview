@@ -54,3 +54,8 @@ td.editview-field {
 table {
   margin: 0px !important;
 }
+
+/* Horizontal Scrolling */
+div[id^="editview-node-form-"], div[id*="editview-node-form-"] {
+    overflow-x: scroll;
+}
