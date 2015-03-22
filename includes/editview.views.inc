@@ -238,6 +238,11 @@ function editview_node_form_submit($form, &$form_state) {
     node_form_submit($form, $form_state);
   }
   if ($form['#entity_type'] == 'user') {
+    $rids = $form_state['values']['rid'];
+    $roles = $form_state['values']['roles'];
+    foreach ($rids as $index => $value) {
+      $form_state['values']['roles'][$index] = $rids[$value];
+    }
     user_profile_form_submit($form, $form_state);
   }
   if ($uri == $form['#parameters'][5] || !isset($form['#parameters'][2]->nid)) {
@@ -324,6 +329,12 @@ function _editview_change_ahah($form, $translate) {
   return $form;
 }
 
+/**
+ * Adds role selection.
+ *
+ * @param type $uid
+ * @return type
+ */
 function editview_role_element($uid) {
   $roles = user_roles(TRUE);
   $account = user_load($uid);
