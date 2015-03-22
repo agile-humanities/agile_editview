@@ -126,6 +126,8 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
   }
   if ($selector == 'uid') {
     $form = user_profile_form($form, $form_state, $object);
+    $uid = $form_state['user']->uid;
+    $form['rid'] = editview_role_element($uid);
   }
   // Let modules alter the node form.
   $form['#method'] = 'post';
@@ -320,4 +322,19 @@ function _editview_change_ahah($form, $translate) {
     }
   }
   return $form;
+}
+
+function editview_role_element($uid) {
+  $roles = user_roles(TRUE);
+  $account = user_load($uid);
+  $current_roles = array_keys($account->roles);
+
+  $form['roles'] = array(
+    '#title' => t("User's roles"),
+    '#type' => 'checkboxes',
+    '#multiple' => TRUE,
+    '#options' => $roles,
+    '#default_value' => $current_roles,
+  );
+  return $form['roles'];
 }
