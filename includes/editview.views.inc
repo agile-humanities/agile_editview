@@ -117,6 +117,7 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
   module_load_include('inc', 'node', 'node.pages');
   module_load_include('inc', 'taxonomy', 'taxonomy.admin');
   module_load_include('inc', 'user', 'user.pages');
+  module_load_include('inc', 'editview', 'includes/editview.views');
   // Get the node form.
   if ($selector == 'nid') {
     $form = node_form($form, $form_state, $object);
@@ -128,6 +129,11 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
     $form = user_profile_form($form, $form_state, $object);
     $uid = $form_state['user']->uid;
     $form['rid'] = editview_role_element($uid);
+    $form['actions']['delete'] = array(
+      '#type' => 'submit',
+      '#value' => t('Delete'),
+      '#weight' => 15,
+    );
   }
   // Let modules alter the node form.
   $form['#method'] = 'post';
@@ -264,8 +270,8 @@ function editview_node_form_delete_submit($form, &$form_state) {
   if (isset($form_state['values']['tid'])) {
     taxonomy_term_delete($form_state['values']['tid']);
   }
-  if (isset($form_state['values']['uid'])) {
-    user_delete($form_state['values']['uid']);
+  if (isset($form_state['values']['rid'])) {
+    user_delete($form_state['user']->uid);
   }
   $form_state['redirect'] = FALSE;
 }
@@ -348,4 +354,8 @@ function editview_role_element($uid) {
     '#default_value' => $current_roles,
   );
   return $form['roles'];
+}
+
+function editview_user_delete_submit($form, $form_state) {
+  $stop = 'herhe';
 }
