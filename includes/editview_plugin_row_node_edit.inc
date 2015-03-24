@@ -7,6 +7,7 @@
  * This is kept in a separate file and included only when needed to prevent
  * missing class errors.
  */
+
 /**
  * @addtogroup editview
  * @{
@@ -26,10 +27,15 @@ class Editview_plugin_row_node_edit extends views_plugin_row {
     $this->view = &$view;
     $this->display = &$display;
 
-    // Overlay incoming options on top of defaults
+    // Overlay incoming options on top of defaults.
     $this->unpack_options($this->options, isset($options) ? $options : $display->handler->get_option('row_options'));
   }
-
+/**
+ * Checks for uses fields bool.
+ *
+ * @return bool
+ *   Indicator
+ */
   function uses_fields() {
     return !empty($this->definition['uses fields']);
   }

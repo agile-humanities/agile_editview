@@ -4,6 +4,7 @@
  * @file
  * Views functions.
  */
+
 /**
  * New node form position: above view results.
  */
@@ -338,8 +339,11 @@ function _editview_change_ahah($form, $translate) {
 /**
  * Adds role selection.
  *
- * @param type $uid
- * @return type
+ * @param string $uid
+ *   uid definign user
+ *
+ * @return array
+ *   Drupal form element
  */
 function editview_role_element($uid) {
   $roles = user_roles(TRUE);
@@ -354,8 +358,4 @@ function editview_role_element($uid) {
     '#default_value' => $current_roles,
   );
   return $form['roles'];
-}
-
-function editview_user_delete_submit($form, $form_state) {
-  $stop = 'herhe';
 }

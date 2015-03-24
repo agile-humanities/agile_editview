@@ -313,6 +313,15 @@ function editviews_build_term($name, $vid, $tid) {
   return $term;
 }
 
+/**
+ * Builds user object.
+ *
+ * @param string $uid
+ *   UID of object, existing or 'new'
+ *
+ * @return User
+ *   User object
+ */
 function editviews_build_user($uid) {
   if ($uid == 'new') {
     $user = array();
