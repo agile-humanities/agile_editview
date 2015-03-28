@@ -55,49 +55,7 @@ function editview_views_plugins() {
   );
 }
 
-/**
- * Menu callback; allow JavaScript to update node in view.
- */
-function editview_js() {
-  if (isset($_POST['form_build_id']) && isset($_POST['editview_view'])) {
-    // We are going to need to load nodes.
-    module_load_include('inc', 'node', 'node.pages');
-    // Build the view so all necessary classes will be defined.
-    $view = views_get_view(filter_input(INPUT_POST, 'editview_view'));
-    $view->build();
 
-    // Fast path is to get the form out of the cache. But if minimum cache
-    // lifetimes have been specified, on post of a form all cached forms
-    // except the posted one get invalidated. In that case we need to rebuild
-    // the form from scratch.
-    $form_build_id = filter_input(INPUT_POST, 'form_build_id');
-    $form_state = array('storage' => NULL, 'submitted' => FALSE);
-    $form = form_get_cache($form_build_id, $form_state);
-    if (empty($form)) {
-      $node = node_load(filter_input(INPUT_POST, 'editview_nid'));
-      $form = drupal_retrieve_form(filter_input(INPUT_POST, 'form_id'), $form_state, $node, $view, filter_input(INPUT_POST, 'editview_order'), filter_input(INPUT_POST, 'editview_uri'));
-      $form['#build_id'] = $form_build_id;
-      drupal_prepare_form($form_id, $form, $form_state);
-    }
-
-    // Submit node.
-    $args = $form['#parameters'];
-    $form_id = array_shift($args);
-    $form_state['post'] = $form['#post'] = $_POST;
-    drupal_process_form($form_id, $form, $form_state);
-
-    // Load fresh copy of the node.
-    unset($form_state['node']);
-    $args[1] = node_load($form_state['values']['nid'], NULL, TRUE);
-    if (!empty($args[1])) {
-      $form = drupal_rebuild_form($form_id, $form_state, $args, $form_build_id);
-      $response = drupal_render($form);
-    }
-
-    // Return form to user.
-    drupal_json(theme('status_messages') . (isset($response) ? $response : ''));
-  }
-}
 
 /**
  * Prepare a node form for the view.
@@ -156,6 +114,12 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
   $form['actions']['submit']['#attributes']['class'][] = "editview-button";
   $form['actions']['delete']['#attributes']['class'][] = "editview-button";
 
+  $ajax = array(
+    'wrapper' => 'editview_node_form_' . $form[$selector]['#value'],
+    'callback' => 'editview_js',
+  );
+  $form['actions']['submit']['#ajax'] = $ajax;
+
   // We need some hidden variables to reconstruct all form options in
   // editview_js, especially in the case the form could not be recovered
   // from the form cache. Also, we add a hidden field which will be filled
@@ -194,6 +158,10 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
   // And add the object.
   $form['#storage']['entity'] = $object;
 
+  // Add files to find node form.
+  if (empty($form_state['build_info']['files']) || !in_array('modules/node/node.pages.inc', $form_state['build_info']['files'])) {
+    form_load_include($form_state, 'inc', 'node', 'node.pages');
+  }
   return $form;
 }
 

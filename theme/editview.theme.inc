@@ -19,7 +19,7 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
     if (!isset($variables['view']->style_options['editview_node_type'])) {
       $variables['view']->style_options['editview_node_type'] = 'article';
     }
-    $type = isset($row->node_type) ? $row->node_type : $variables['view']->style_options['editview_node_type'];
+    $type = isset($variables['row']->node_type) ? $variables['row']->node_type : $variables['view']->style_options['editview_node_type'];
     $type = strtolower($type);
     if (!$type) {
       $type = 'article';
@@ -60,13 +60,14 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
       module_load_include('inc', 'node', 'node.pages');
       $run = FALSE;
     }
-    // Add the node form to the variables array.
+   // Add the node form to the variables array.
     $uri = request_uri();
     $view = $variables['view'];
     $id = $variables['id'];
     $form = drupal_get_form('editview_node_form_' . $variables['row']->$selector, $object, $view, $id, $uri, $selector);
     $form = drupal_render($form);
     $variables['form'] = $form;
+
   }
 }
 
