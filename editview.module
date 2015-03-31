@@ -158,6 +158,8 @@ function editview_form_after_build_proxy($form, &$form_state) {
  */
 function editview_js($form, $form_state) {
   $a = 'foo';
+
+
   if (isset($_POST['form_build_id']) && isset($_POST['editview_view'])) {
     // We are going to need to load nodes.
     module_load_include('inc', 'node', 'node.pages');
@@ -180,22 +182,32 @@ function editview_js($form, $form_state) {
     }
 
     // Submit node.
-    $args = $form['#parameters'];
-    $form_id = array_shift($args);
+    //$args = $form['#parameters'];
+    $form_id = $form['#form_id'];
     $form_state['post'] = $form['#post'] = $_POST;
     drupal_process_form($form_id, $form, $form_state);
 
     // Load fresh copy of the node.
     unset($form_state['node']);
     $args[1] = node_load($form_state['values']['nid'], NULL, TRUE);
-    if (!empty($args[1])) {
-      $form = drupal_rebuild_form($form_id, $form_state, $args, $form_build_id);
+    if ($args[1]) {
+      $form = drupal_rebuild_form($form_id, $form_state);
       $response = drupal_render($form);
+    }
+    else {
+      $commands[] = ajax_command_replace($form_id, '');
+
+      return array('#type' => 'ajax', '#commands' => $commands);
     }
 
     // Return form to user.
     //drupal_json_output(theme('status_messages') . (isset($response) ? $response : ''));
-    return $form;
+    return $response;
 
   }
+}
+
+function rosie_js($form, $form_state) {
+  $commands[] = ajax_command_replace('#editview-node-form-new', 'some html here');
+  return array('#type' => 'ajax', '#commands' => $commands);
 }

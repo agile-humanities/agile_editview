@@ -115,10 +115,13 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
   $form['actions']['delete']['#attributes']['class'][] = "editview-button";
 
   $ajax = array(
-    'wrapper' => 'editview_node_form_' . $form[$selector]['#value'],
+    'wrapper' => 'editview-node-form-' . $form[$selector]['#value'],
     'callback' => 'editview_js',
+    'effect' => 'fade',
+    'speed' => 2000,
   );
   $form['actions']['submit']['#ajax'] = $ajax;
+  $form['actions']['delete']['#ajax'] = $ajax;
 
   // We need some hidden variables to reconstruct all form options in
   // editview_js, especially in the case the form could not be recovered
