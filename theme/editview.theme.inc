@@ -43,7 +43,10 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
 
   if ($selector == 'uid') {
     $uid = $variables['row']->uid;
-    $object = editviews_build_user($uid);
+    if($uid == 'new') {
+      return;
+    }
+    $object = $user = user_load($uid);
     $valid = TRUE;
   }
   // Check user permissions.
@@ -314,23 +317,3 @@ function editviews_build_term($name, $vid, $tid) {
   return $term;
 }
 
-/**
- * Builds user object.
- *
- * @param string $uid
- *   UID of object, existing or 'new'
- *
- * @return User
- *   User object
- */
-function editviews_build_user($uid) {
-  if ($uid == 'new') {
-    $user = array();
-    $user['uid'] = $uid;
-    $user = entity_create('user', $user);
-  }
-  else {
-    $user = user_load($uid);
-  }
-  return $user;
-}
