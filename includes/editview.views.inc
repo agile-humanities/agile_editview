@@ -225,7 +225,7 @@ function editview_node_form_submit($form, &$form_state) {
   }
   if ($uri == $form_state['build_info']['args'][3] || !isset($form_state['build_info']['args'][0]->nid)) {
     global $base_root;
-    $form_state['redirect'] = $base_root . $uri;
+    $form_state['redirect'] = url($uri);
   }
   else {
     $form_state['redirect'] = FALSE;
