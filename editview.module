@@ -114,7 +114,6 @@ function editview_menu() {
     'page callback' => 'editview_js',
     'type' => MENU_CALLBACK,
     'access callback' => TRUE,
-    'file' => 'includes/editview.views.inc',
   );
   return $items;
 }
