@@ -57,8 +57,8 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
     static $run = TRUE;
     if ($run) {
       drupal_add_js('misc/jquery.form.js');
-      drupal_add_js(drupal_get_path('module', 'editview') . '/theme/editview.js');
-      drupal_add_js(array('editview' => array('submit_url' => url('editview_js'))), 'setting');
+      //drupal_add_js(drupal_get_path('module', 'editview') . '/theme/editview.js');
+      //drupal_add_js(array('editview' => array('submit_url' => url('editview_js'))), 'setting');
       drupal_add_css(drupal_get_path('module', 'editview') . '/theme/editview.css');
       module_load_include('inc', 'node', 'node.pages');
       $run = FALSE;

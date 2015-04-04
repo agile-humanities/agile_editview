@@ -114,7 +114,6 @@ function editview_menu() {
     'page callback' => 'editview_js',
     'type' => MENU_CALLBACK,
     'access callback' => TRUE,
-    'file' => 'includes/editview.views.inc',
   );
   return $items;
 }
@@ -158,6 +157,9 @@ function editview_form_after_build_proxy($form, &$form_state) {
  * Function callback; allow JavaScript to update node in view.
  */
 function editview_js($form, $form_state) {
+  $form_id = $form['#form_id'];
+
+  /* I don't think we need this.
   if (isset($_POST['form_build_id']) && isset($_POST['editview_view'])) {
     // We are going to need to load nodes.
     module_load_include('inc', 'node', 'node.pages');
@@ -184,11 +186,13 @@ function editview_js($form, $form_state) {
     $form_id = $form['#form_id'];
     $form_state['post'] = $form['#post'] = $_POST;
     drupal_process_form($form_id, $form, $form_state);
-
+*/
     // Load fresh copy of the node.
     unset($form_state['node']);
-    $args[1] = node_load($form_state['values']['nid'], NULL, TRUE);
-    if ($args[1]) {
+    $node = node_load($form_state['values']['nid'], NULL, TRUE);
+    if ($node) {
+      $form_state['node'] = $node;
+      $form_state['build info']['args'][0] = $node;
       $form = drupal_rebuild_form($form_id, $form_state);
       $response = drupal_render($form);
     }
@@ -202,7 +206,7 @@ function editview_js($form, $form_state) {
     //drupal_json_output(theme('status_messages') . (isset($response) ? $response : ''));
     return $response;
 
-  }
+  //}
 }
 
 function rosie_js($form, $form_state) {
