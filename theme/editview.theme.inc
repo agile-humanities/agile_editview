@@ -19,7 +19,7 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
     if (!isset($variables['view']->style_options['editview_node_type'])) {
       $variables['view']->style_options['editview_node_type'] = 'article';
     }
-    $type = isset($variables['row']->node_type) ? $variables['row']->node_type : $variables['view']->style_options['editview_node_type'];
+    $type = empty($variables['row']->node_type) ? $variables['view']->style_options['editview_node_type'] : $variables['row']->node_type;
     $type = strtolower($type);
     if (!$type) {
       $type = 'article';
