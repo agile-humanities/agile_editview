@@ -1,6 +1,7 @@
 /**
  * @file
  * Custom javascript.
+ */
 
 Drupal.behaviors.editview = function(context) {
   $('form', context).each(Editview.formCapture);
@@ -51,4 +52,3 @@ var Editview = Editview || {
     }
   }
 };
-*/

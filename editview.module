@@ -107,6 +107,7 @@ return array(array());</pre>' .
 
 /**
  * Implements hook_menu().
+ */
 
 function editview_menu() {
   $items['editview_js'] = array(
@@ -117,7 +118,7 @@ function editview_menu() {
   );
   return $items;
 }
-*/
+
 
 /**
  * Implements hook_theme().
@@ -157,9 +158,6 @@ function editview_form_after_build_proxy($form, &$form_state) {
  * Function callback; allow JavaScript to update node in view.
  */
 function editview_js($form, $form_state) {
-  $a = 'foo';
-
-
   if (isset($_POST['form_build_id']) && isset($_POST['editview_view'])) {
     // We are going to need to load nodes.
     module_load_include('inc', 'node', 'node.pages');
