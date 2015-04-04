@@ -38,6 +38,7 @@ var Editview = Editview || {
           $(wrapper).append(response);
           $(wrapper).slideDown('slow');
           Drupal.attachBehaviors(wrapper);
+          $('form', context).each(Editview.formCapture);
           //$('.messages', wrapper).fadeOut(6000);
         },
         dataType: 'json',
