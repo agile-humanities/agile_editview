@@ -78,7 +78,7 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
   // Get the node form.
   $identifier = NULL;
   if ($selector == 'nid') {
-  $identifier = $object->nid;
+    $identifier = $object->nid;
     if ($object->nid != 'new') {
       $object = node_load($object->nid);
     }
@@ -90,7 +90,9 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
     );
   }
   if ($selector == 'tid') {
-    $identifier = $object->tid;
+    if (isset($object->tid)) {
+      $identifier = $object->tid;
+    }
     $form = taxonomy_form_term($form, $form_state, $object);
   }
   if ($selector == 'uid') {
@@ -222,6 +224,7 @@ function editview_form_after_build($form, &$form_state) {
 function editview_node_form_submit($form, &$form_state) {
   $uri = request_uri();
   if ($form['#entity_type'] == 'taxonomy_term') {
+    module_load_include('inc', 'taxonomy', 'taxonomy.admin');
     taxonomy_form_term_submit($form, $form_state);
   }
   if ($form['#entity_type'] == 'node') {

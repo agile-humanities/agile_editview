@@ -159,15 +159,40 @@ function editview_js($form, $form_state) {
   // return $form;
   if (isset($form_state['values']['nid'])) {
     $title_type = 'title';
+    $object_type = 'node';
+  }
+  if (isset($form_state['values']['tid'])) {
+    $title_type = 'name';
+    $object_type = 'taxonomy';
+  }
+  if (isset($form_state['values']['uid'])) {
+    $title_type = 'name';
+    $object_type = 'user';
   }
   $title = $form_state['values'][$title_type];
   $nid = $_POST['editview_nid'];
-  $object = node_load($nid);
+  switch ($object_type) {
+    case 'node':
+      $object = node_load($nid);
+      break;
+
+    case 'taxonomy':
+      $object = taxonomy_term_load($nid);
+      break;
+
+    case 'user' :
+      $object = user_load($nid);
+      break;
+  }
+
   if ($object) {
-    $object->changed = node_last_changed($nid);
-    $form['#storage']['entity'] = $object;
+    if ($object_type == 'node') {
+      $object->changed = node_last_changed($nid);
+      $form['#storage']['entity'] = $object;
+    }
     return $form;
   }
+
   $message = t("@title has been deleted", array('@title' => $title));
   return "<div class='messages status'>$message</div>";
 }
