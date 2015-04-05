@@ -76,7 +76,9 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
   module_load_include('inc', 'editview', 'includes/editview.views');
   form_load_include($form_state, 'inc', 'editview', 'includes/editview.views');
   // Get the node form.
+  $identifier = NULL;
   if ($selector == 'nid') {
+  $identifier = $object->nid;
     if ($object->nid != 'new') {
       $object = node_load($object->nid);
     }
@@ -88,6 +90,7 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
     );
   }
   if ($selector == 'tid') {
+    $identifier = $object->tid;
     $form = taxonomy_form_term($form, $form_state, $object);
   }
   if ($selector == 'uid') {
@@ -171,6 +174,9 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
   if (empty($form_state['build_info']['files']) || !in_array('modules/node/node.pages.inc', $form_state['build_info']['files'])) {
     form_load_include($form_state, 'inc', 'node', 'node.pages');
   }
+  if ($identifier == 'new') {
+    unset($form['actions']['delete']);
+  }
   return $form;
 }
 
@@ -242,6 +248,7 @@ function editview_node_form_submit($form, &$form_state) {
  * Override the node delete redirect.
  */
 function editview_node_form_delete_submit($form, &$form_state) {
+
   if (isset($form_state['values']['nid'])) {
     node_delete($form_state['values']['nid']);
   }

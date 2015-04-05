@@ -157,13 +157,17 @@ function editview_form_after_build_proxy($form, &$form_state) {
 function editview_js($form, $form_state) {
   module_load_include('module', 'node');
   // return $form;
-  $form_id = $form['#form_id'];
+  if (isset($form_state['values']['nid'])) {
+    $title_type = 'title';
+  }
+  $title = $form_state['values'][$title_type];
   $nid = $_POST['editview_nid'];
   $object = node_load($nid);
   if ($object) {
     $object->changed = node_last_changed($nid);
     $form['#storage']['entity'] = $object;
+    return $form;
   }
-  return $object ? $form : "You're out of here";
-
+  $message = t("@title has been deleted", array('@title' => $title));
+  return "<div class='messages status'>$message</div>";
 }
