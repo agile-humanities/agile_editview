@@ -108,7 +108,6 @@ return array(array());</pre>' .
 /**
  * Implements hook_menu().
  */
-
 function editview_menu() {
   $items['editview_js'] = array(
     'page callback' => 'editview_js',
@@ -117,7 +116,6 @@ function editview_menu() {
   );
   return $items;
 }
-
 
 /**
  * Implements hook_theme().
@@ -157,59 +155,15 @@ function editview_form_after_build_proxy($form, &$form_state) {
  * Function callback; allow JavaScript to update node in view.
  */
 function editview_js($form, $form_state) {
+  module_load_include('module', 'node');
+  // return $form;
   $form_id = $form['#form_id'];
+  $nid = $_POST['editview_nid'];
+  $object = node_load($nid);
+  if ($object) {
+    $object->changed = node_last_changed($nid);
+    $form['#storage']['entity'] = $object;
+  }
+  return $object ? $form : "You're out of here";
 
-  /* I don't think we need this.
-  if (isset($_POST['form_build_id']) && isset($_POST['editview_view'])) {
-    // We are going to need to load nodes.
-    module_load_include('inc', 'node', 'node.pages');
-    // Build the view so all necessary classes will be defined.
-    $view = views_get_view(filter_input(INPUT_POST, 'editview_view'));
-    $view->build();
-
-    // Fast path is to get the form out of the cache. But if minimum cache
-    // lifetimes have been specified, on post of a form all cached forms
-    // except the posted one get invalidated. In that case we need to rebuild
-    // the form from scratch.
-    $form_build_id = filter_input(INPUT_POST, 'form_build_id');
-    $form_state = array('storage' => NULL, 'submitted' => FALSE);
-    $form = form_get_cache($form_build_id, $form_state);
-    if (empty($form)) {
-      $node = node_load(filter_input(INPUT_POST, 'editview_nid'));
-      $form = drupal_retrieve_form(filter_input(INPUT_POST, 'form_id'), $form_state, $node, $view, filter_input(INPUT_POST, 'editview_order'), filter_input(INPUT_POST, 'editview_uri'));
-      $form['#build_id'] = $form_build_id;
-      drupal_prepare_form($form_id, $form, $form_state);
-    }
-
-    // Submit node.
-    //$args = $form['#parameters'];
-    $form_id = $form['#form_id'];
-    $form_state['post'] = $form['#post'] = $_POST;
-    drupal_process_form($form_id, $form, $form_state);
-*/
-    // Load fresh copy of the node.
-    unset($form_state['node']);
-    $node = node_load($form_state['values']['nid'], NULL, TRUE);
-    if ($node) {
-      $form_state['node'] = $node;
-      $form_state['build info']['args'][0] = $node;
-      $form = drupal_rebuild_form($form_id, $form_state);
-      $response = drupal_render($form);
-    }
-    else {
-      $commands[] = ajax_command_replace($form_id, '');
-
-      return array('#type' => 'ajax', '#commands' => $commands);
-    }
-
-    // Return form to user.
-    //drupal_json_output(theme('status_messages') . (isset($response) ? $response : ''));
-    return $response;
-
-  //}
-}
-
-function rosie_js($form, $form_state) {
-  $commands[] = ajax_command_replace('#editview-node-form-new', 'some html here');
-  return array('#type' => 'ajax', '#commands' => $commands);
 }

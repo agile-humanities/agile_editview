@@ -4,7 +4,6 @@
  * @file
  * Views functions.
  */
-
 /**
  * New node form position: above view results.
  */
@@ -55,8 +54,6 @@ function editview_views_plugins() {
   );
 }
 
-
-
 /**
  * Prepare a node form for the view.
  *
@@ -77,9 +74,18 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
   module_load_include('inc', 'taxonomy', 'taxonomy.admin');
   module_load_include('inc', 'user', 'user.pages');
   module_load_include('inc', 'editview', 'includes/editview.views');
+  form_load_include($form_state, 'inc', 'editview', 'includes/editview.views');
   // Get the node form.
   if ($selector == 'nid') {
+    if ($object->nid != 'new') {
+      $object = node_load($object->nid);
+    }
+
     $form = node_form($form, $form_state, $object);
+    $form["node_nid"] = array(
+      '#type' => 'hidden',
+      '#value' => $object->nid,
+    );
   }
   if ($selector == 'tid') {
     $form = taxonomy_form_term($form, $form_state, $object);
