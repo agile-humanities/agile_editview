@@ -103,7 +103,7 @@ class editview_plugin_style_node_add extends views_plugin_style {
       $object->$alias = ''; // NULL;
 
       $key = "field_" . $key;
-      $object->$key = '';
+      $object->$key = array();
     }
     $object->$selector = 'new';
     if (!isset($this->view->filter['type']) && $selector == 'nid' && empty($this->options['editview_node_type'])) {
