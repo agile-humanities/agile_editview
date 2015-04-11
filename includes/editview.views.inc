@@ -76,9 +76,7 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
   module_load_include('inc', 'editview', 'includes/editview.views');
   form_load_include($form_state, 'inc', 'editview', 'includes/editview.views');
   // Get the node form.
-  $identifier = NULL;
   if ($selector == 'nid') {
-    $identifier = $object->nid;
     if ($object->nid != 'new') {
       $object = node_load($object->nid);
     }
@@ -91,7 +89,6 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
   }
   if ($selector == 'tid') {
     if (isset($object->tid)) {
-      $identifier = $object->tid;
     }
     $form = taxonomy_form_term($form, $form_state, $object);
   }
@@ -114,6 +111,8 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
   // Change save and delete functions.
   $form['actions']['submit']['#submit'] = array('editview_node_form_submit');
   $form['actions']['delete']['#submit'] = array('editview_node_form_delete_submit');
+  $form['actions']['submit']['#validate'] = array('editview_node_form_validate');
+  //$form['actions']['delete']['#validate'] = array('editview_node_form_validate');
 
   // Mark the buttons for Javascript handling.
   if (!isset($form['actions']['submit']['#attributes']['class'])) {
@@ -176,7 +175,7 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
   if (empty($form_state['build_info']['files']) || !in_array('modules/node/node.pages.inc', $form_state['build_info']['files'])) {
     form_load_include($form_state, 'inc', 'node', 'node.pages');
   }
-  if ($identifier == 'new') {
+  if (isset($object->is_new) && $object->is_new) {
     unset($form['actions']['delete']);
     unset($form['actions']['submit']['#ajax']);
   }
@@ -192,7 +191,7 @@ function editview_form_after_build($form, &$form_state) {
   // If the item is 'new' and has just been submitted, remove the nid.
   if (isset($form_state['triggering_element']) && $form_state['triggering_element']['#type'] == 'submit' && $form_state['executed'] == FALSE) {
     $selector = $form_state['build_info']['args'][4];
-    if ($form_state['build_info']['args'][0]->$selector == 'new') {
+    if (isset($form_state['build_info']['args'][0]->is_new) && ($form_state['build_info']['args'][0]->is_new)) {
       unset($form_state['values'][$selector]);
     }
   }
@@ -224,6 +223,14 @@ function editview_form_after_build($form, &$form_state) {
   return $form;
 }
 
+function editview_node_form_validate($form, &$form_state) {
+  if ($form['#entity_type'] == 'node') {
+    $nid = $form['#node']->nid;
+    if ($nid != 'new') {
+      $form_state['values']['changed'] = node_last_changed($nid);
+    }
+  }
+}
 /**
  * Override the node submit redirect.
  *
@@ -238,8 +245,11 @@ function editview_node_form_submit($form, &$form_state) {
     $selector = 'tid';
   }
   if ($form['#entity_type'] == 'node') {
+    if ($form_state['node']->nid == 'new') {
+      unset($form_state['node']->nid);
+    }
     node_form_submit($form, $form_state);
-    $selector = 'bid';
+    $selector = 'nid';
   }
   if ($form['#entity_type'] == 'user') {
     $rids = $form_state['values']['rid'];

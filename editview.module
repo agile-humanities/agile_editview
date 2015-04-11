@@ -190,6 +190,7 @@ function editview_js($form, $form_state) {
   if ($object) {
     if ($object_type == 'node') {
       $object->changed = node_last_changed($nid);
+
       $form['#storage']['entity'] = $object;
     }
     return $form;
