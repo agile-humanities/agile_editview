@@ -157,11 +157,11 @@ function editview_form_after_build_proxy($form, &$form_state) {
 function editview_js($form, $form_state) {
   module_load_include('module', 'node');
   // return $form;
-  if (isset($form_state['nid'])) {
+  if (isset($form_state['values']['nid'])) {
     $title_type = 'title';
     $object_type = 'node';
   }
-  elseif (isset($form_state['values']['tid'])) { // can we do $form_state['tid']?
+  elseif (isset($form_state['values']['tid'])) {
     $title_type = 'name';
     $object_type = 'taxonomy';
   }
@@ -177,7 +177,9 @@ function editview_js($form, $form_state) {
       break;
 
     case 'taxonomy':
+      $nid = $form_state['term']->tid;
       $object = taxonomy_term_load($nid);
+
       break;
 
     case 'user' :

@@ -195,7 +195,6 @@ function editview_form_after_build($form, &$form_state) {
     if ($form_state['build_info']['args'][0]->$selector == 'new') {
       unset($form_state['values'][$selector]);
     }
-
   }
   static $ids;
 
@@ -232,17 +231,20 @@ function editview_form_after_build($form, &$form_state) {
  * to the requesting page.
  */
 function editview_node_form_submit($form, &$form_state) {
-
+  $selector = 'nid';
   if ($form['#entity_type'] == 'taxonomy_term') {
     module_load_include('inc', 'taxonomy', 'taxonomy.admin');
     taxonomy_form_term_submit($form, $form_state);
+    $selector = 'tid';
   }
   if ($form['#entity_type'] == 'node') {
     node_form_submit($form, $form_state);
+    $selector = 'bid';
   }
   if ($form['#entity_type'] == 'user') {
     $rids = $form_state['values']['rid'];
     $roles = $form_state['values']['roles'];
+    $selector = 'uid';
     foreach ($rids as $index => $value) {
       $form_state['values']['roles'][$index] = $rids[$value];
     }
@@ -252,7 +254,7 @@ function editview_node_form_submit($form, &$form_state) {
   $uri = request_uri();
   $path = request_path();
 
-  if ($uri == $form_state['build_info']['args'][3] || $form_state['build_info']['args'][0]->nid == 'new') {
+  if ($uri == $form_state['build_info']['args'][3] || $form_state['build_info']['args'][0]->$selector == 'new') {
     global $base_root;
     $form_state['redirect'] = $path;
   }
