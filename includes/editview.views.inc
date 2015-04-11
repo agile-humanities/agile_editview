@@ -125,7 +125,7 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
   $form['actions']['delete']['#attributes']['class'][] = "editview-button";
 
   $ajax = array(
-    'wrapper' => 'editview-node-form-' . $form[$selector]['#value'],
+    'wrapper' => 'editview-node-form-' . $object->$selector,
     'callback' => 'editview_js',
     'effect' => 'fade',
     'speed' => 2000,
