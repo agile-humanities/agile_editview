@@ -178,6 +178,7 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
   }
   if ($identifier == 'new') {
     unset($form['actions']['delete']);
+    unset($form['actions']['submit']['#ajax']);
   }
   return $form;
 }
@@ -231,14 +232,7 @@ function editview_form_after_build($form, &$form_state) {
  * to the requesting page.
  */
 function editview_node_form_submit($form, &$form_state) {
-  $uri = request_uri();
-  if ($uri == $form_state['build_info']['args'][3] || !isset($form_state['build_info']['args'][0]->nid)) {
-    global $base_root;
-    $form_state['redirect'] = url($uri);
-  }
-  else {
-    $form_state['redirect'] = FALSE;
-  }
+
   if ($form['#entity_type'] == 'taxonomy_term') {
     module_load_include('inc', 'taxonomy', 'taxonomy.admin');
     taxonomy_form_term_submit($form, $form_state);
@@ -255,6 +249,16 @@ function editview_node_form_submit($form, &$form_state) {
     user_profile_form_submit($form, $form_state);
   }
 
+  $uri = request_uri();
+  $path = request_path();
+
+  if ($uri == $form_state['build_info']['args'][3] || $form_state['build_info']['args'][0]->nid == 'new') {
+    global $base_root;
+    $form_state['redirect'] = $path;
+  }
+  else {
+    $form_state['redirect'] = FALSE;
+  }
 }
 
 /**

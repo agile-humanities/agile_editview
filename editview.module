@@ -157,15 +157,15 @@ function editview_form_after_build_proxy($form, &$form_state) {
 function editview_js($form, $form_state) {
   module_load_include('module', 'node');
   // return $form;
-  if (isset($form_state['values']['nid'])) {
+  if (isset($form_state['nid'])) {
     $title_type = 'title';
     $object_type = 'node';
   }
-  if (isset($form_state['values']['tid'])) {
+  elseif (isset($form_state['values']['tid'])) { // can we do $form_state['tid']?
     $title_type = 'name';
     $object_type = 'taxonomy';
   }
-  if (isset($form_state['values']['uid'])) {
+  elseif (isset($form_state['values']['uid'])) {
     $title_type = 'name';
     $object_type = 'user';
   }
