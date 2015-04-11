@@ -188,8 +188,17 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
  * Collects all form ids and puts them into Drupal.settings.
  */
 function editview_form_after_build($form, &$form_state) {
+  // If the item is 'new' and has just been submitted, remove the nid.
+  if (isset($form_state['triggering_element']) && $form_state['triggering_element']['#type'] == 'submit' && $form_state['executed'] == FALSE) {
+    $selector = $form_state['build_info']['args'][4];
+    if ($form_state['build_info']['args'][0]->$selector == 'new') {
+      unset($form_state['values'][$selector]);
+    }
+
+  }
   static $ids;
 
+  // THIS ACTUALLY DOES NOT DETECT JAVASCRIPT - REMOVE.
   // Check if we are in a Javascript callback.
   if (array_key_exists('HTTP_X_REQUESTED_WITH', $_SERVER) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
     // This is a Javascript callback, so we try to restore all ids.
@@ -223,6 +232,13 @@ function editview_form_after_build($form, &$form_state) {
  */
 function editview_node_form_submit($form, &$form_state) {
   $uri = request_uri();
+  if ($uri == $form_state['build_info']['args'][3] || !isset($form_state['build_info']['args'][0]->nid)) {
+    global $base_root;
+    $form_state['redirect'] = url($uri);
+  }
+  else {
+    $form_state['redirect'] = FALSE;
+  }
   if ($form['#entity_type'] == 'taxonomy_term') {
     module_load_include('inc', 'taxonomy', 'taxonomy.admin');
     taxonomy_form_term_submit($form, $form_state);
@@ -238,13 +254,7 @@ function editview_node_form_submit($form, &$form_state) {
     }
     user_profile_form_submit($form, $form_state);
   }
-  if ($uri == $form_state['build_info']['args'][3] || !isset($form_state['build_info']['args'][0]->nid)) {
-    global $base_root;
-    $form_state['redirect'] = url($uri);
-  }
-  else {
-    $form_state['redirect'] = FALSE;
-  }
+
 }
 
 /**
