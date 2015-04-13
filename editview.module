@@ -53,6 +53,13 @@ function editview_forms($form_id, $args) {
   return $forms;
 }
 
+/**
+ * Proxy for the editview_form_after_build function.
+ */
+function editview_form_after_build_proxy($form, &$form_state) {
+  module_load_include('inc', 'editview', 'includes/editview.views');
+  return editview_form_after_build($form, $form_state);
+}
 
 /**
  * Function callback; allow JavaScript to update node in view.
