@@ -72,9 +72,8 @@ function editview_views_plugins() {
 function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $selector) {
   module_load_include('inc', 'node', 'node.pages');
   module_load_include('inc', 'taxonomy', 'taxonomy.admin');
-  module_load_include('inc', 'user', 'user.pages');
-  module_load_include('inc', 'editview', 'includes/editview.views');
   form_load_include($form_state, 'inc', 'editview', 'includes/editview.views');
+  form_load_include($form_state, 'inc', 'user', 'user.pages');
   // Get the node form.
   if ($selector == 'nid') {
     if ($object->nid != 'new') {
