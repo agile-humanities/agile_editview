@@ -16,6 +16,7 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
   $selector = $variables['view']->base_field;
   $valid = FALSE;
   if ($selector == 'nid') {
+    // Set a default node type to 'article' to avoid ajax errors when creating a new node view.
     if (!isset($variables['view']->style_options['editview_node_type'])) {
       $variables['view']->style_options['editview_node_type'] = 'article';
     }
@@ -25,7 +26,7 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
       $type = 'article';
     }
     $nid = $variables['row']->nid;
-    $object = editviews_build_node($nid, $type);
+    $object = editview_build_node($nid, $type);
     if (isset($object->nid) && node_access('update', $object) || !isset($object->nid) && node_access('create', $type)) {
       $valid = TRUE;
     }
@@ -37,7 +38,7 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
     }
     $name = $variables['row']->taxonomy_term_data_name;
     $vid = $tid == 'new' ? $variables['view']->style_options['editview_vocab_vid'] : $variables['row']->taxonomy_term_data_vid;
-    $object = editviews_build_term($name, $vid, $tid);
+    $object = editview_build_term($name, $vid, $tid);
     $valid = TRUE;
   }
 
@@ -57,8 +58,6 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
     static $run = TRUE;
     if ($run) {
       drupal_add_js('misc/jquery.form.js');
-      //drupal_add_js(drupal_get_path('module', 'editview') . '/theme/editview.js');
-      //drupal_add_js(array('editview' => array('submit_url' => url('editview_js'))), 'setting');
       drupal_add_css(drupal_get_path('module', 'editview') . '/theme/editview.css');
       module_load_include('inc', 'node', 'node.pages');
       $run = FALSE;
@@ -266,11 +265,10 @@ function _editview_form_field(&$elements, $field) {
  * @return Node
  *   New or existing node
  */
-function editviews_build_node($nid, $type) {
+function editview_build_node($nid, $type) {
   global $user;
   if ($nid == 'new') {
     // Create dummy node for new node form.
-    $fields = field_info_instances('node', $type);
     $values = array(
       'nid' => $nid,
       'type' => $type,
@@ -304,7 +302,7 @@ function editviews_build_node($nid, $type) {
  * @return term
  *   New or existing term
  */
-function editviews_build_term($name, $vid, $tid) {
+function editview_build_term($name, $vid, $tid) {
   if ($tid == 'new') {
     $term = array();
     $term['name'] = $name;
