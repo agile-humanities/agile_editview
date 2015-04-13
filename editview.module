@@ -165,7 +165,7 @@ function editview_js($form, $form_state) {
     $title_type = 'name';
     $object_type = 'taxonomy';
   }
-  elseif (isset($form_state['values']['uid'])) {
+  elseif (isset($form_state['values']['rid'])) {
     $title_type = 'name';
     $object_type = 'user';
   }
