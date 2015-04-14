@@ -186,7 +186,7 @@ function editview_field_form_render(&$form, $field) {
 function _editview_form_field(&$elements, $field) {
 
   if (isset($elements[$field])) {
-    if ($elements[$field]['#type'] == 'textarea') {
+    if (isset($elements[$field]['#type']) && $elements[$field]['#type'] == 'textarea') {
       $elements[$field]['#resizable'] = FALSE;
       $elements[$field]['#rows'] = 2;
     }
@@ -267,13 +267,14 @@ function _editview_form_field(&$elements, $field) {
  */
 function editview_build_node($nid, $type) {
   global $user;
+ $name = isset($user->name) ? $user->name : 'anonymous';
   if ($nid == 'new') {
     // Create dummy node for new node form.
     $values = array(
       'nid' => $nid,
       'type' => $type,
       'uid' => $user->uid,
-      'name' => $user->name,
+      'name' => $name,
       'status' => 1,
       'comment' => 1,
       'bundle' => $type,
