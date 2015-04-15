@@ -230,11 +230,11 @@ function editview_node_form_submit($form, &$form_state) {
   }
   if ($form['#entity_type'] == 'user') {
     $rids = $form_state['values']['rid'];
-    $roles = $form_state['values']['roles'];
     $selector = 'uid';
     foreach ($rids as $index => $value) {
-      $form_state['values']['roles'][$index] = $rids[$value];
+      $form_state['values']['roles'][$index] = $value;
     }
+    $form_state['values']['signature'] = NULL;
     user_profile_form_submit($form, $form_state);
   }
 
