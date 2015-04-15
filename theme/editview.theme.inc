@@ -47,7 +47,7 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
     if($uid == 'new') {
       return;
     }
-    $object = $user = user_load($uid);
+    $object = user_load($uid);
     $valid = TRUE;
   }
   // Check user permissions.
