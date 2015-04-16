@@ -74,7 +74,6 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
   module_load_include('inc', 'taxonomy', 'taxonomy.admin');
   form_load_include($form_state, 'inc', 'editview', 'includes/editview.views');
   form_load_include($form_state, 'inc', 'user', 'user.pages');
-
   // Get the node form.
 
   if ($selector == 'nid') {
@@ -83,6 +82,11 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
     }
 
     $form = node_form($form, $form_state, $object);
+    $form_id = $form_state['build_info']['form_id'];
+    if (module_exists('auto_nodetitle')) {
+      auto_nodetitle_form_node_form_alter($form, $form_state, $form_id);
+    }
+
     $form["node_nid"] = array(
       '#type' => 'hidden',
       '#value' => $object->nid,
@@ -90,6 +94,7 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
   }
   if ($selector == 'tid') {
     if (isset($object->tid)) {
+
     }
     $form = taxonomy_form_term($form, $form_state, $object);
   }
@@ -114,7 +119,6 @@ function editview_node_form($form, &$form_state, $object, $view, $order, $uri, $
   $form['actions']['delete']['#submit'] = array('editview_node_form_delete_submit');
   $form['actions']['submit']['#validate'] = array('editview_node_form_validate');
   //$form['actions']['delete']['#validate'] = array('editview_node_form_validate');
-
   // Mark the buttons for Javascript handling.
   if (!isset($form['actions']['submit']['#attributes']['class'])) {
     $form['actions']['submit']['#attributes']['class'] = array();
@@ -208,6 +212,7 @@ function editview_node_form_validate($form, &$form_state) {
     }
   }
 }
+
 /**
  * Override the node submit redirect.
  *

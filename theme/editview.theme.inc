@@ -44,7 +44,7 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
 
   if ($selector == 'uid') {
     $uid = $variables['row']->uid;
-    if($uid == 'new') {
+    if ($uid == 'new') {
       return;
     }
     $object = user_load($uid);
@@ -62,14 +62,18 @@ function template_preprocess_editview_view_row_node_edit(&$variables) {
       module_load_include('inc', 'node', 'node.pages');
       $run = FALSE;
     }
-   // Add the node form to the variables array.
+    // Add the node form to the variables array.
     $uri = request_uri();
     $view = $variables['view'];
     $id = $variables['id'];
     $form = drupal_get_form('editview_node_form_' . $variables['row']->$selector, $object, $view, $id, $uri, $selector);
+    if (module_exists('auto_nodetitle')) {
+      if (auto_nodetitle_get_setting($form['#node']->type) == AUTO_NODETITLE_ENABLED) {
+        unset($form['title']);
+      }
+    }
     $form = drupal_render($form);
     $variables['form'] = $form;
-
   }
 }
 
@@ -140,6 +144,7 @@ function theme_editview_custom_node_form(&$variables) {
  * Implements hook_field_form_render().
  */
 function editview_field_form_render(&$form, $field) {
+
   $element = array('class' => 'editview-field', 'valign' => 'top');
   $debug_field = $field->field_alias;
   switch ($field->field_alias) {
@@ -267,7 +272,7 @@ function _editview_form_field(&$elements, $field) {
  */
 function editview_build_node($nid, $type) {
   global $user;
- $name = isset($user->name) ? $user->name : 'anonymous';
+  $name = isset($user->name) ? $user->name : 'anonymous';
   if ($nid == 'new') {
     // Create dummy node for new node form.
     $values = array(
