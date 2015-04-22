@@ -244,7 +244,8 @@ function _editview_form_field(&$elements, $field) {
     return $file_list . drupal_render($elements['attachments']['wrapper']['new']['upload']) . drupal_render($elements['attachments']['wrapper']['new']['attach']);
   }
   else {
-    foreach (element_children($elements) as $key) {
+    $children = element_children($elements);
+    foreach ($children as $key) {
       $output = _editview_form_field($elements[$key], $field);
       if (isset($output)) {
         return $output;
