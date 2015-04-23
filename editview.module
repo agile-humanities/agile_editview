@@ -81,6 +81,7 @@ function editview_js($form, $form_state) {
   }
   $title = $form_state['values'][$title_type];
   $nid = $_POST['editview_nid'];
+
   switch ($object_type) {
     case 'node':
       $object = node_load($nid);
