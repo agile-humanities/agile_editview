@@ -28,6 +28,14 @@ caveats:
           new node form and where it will appear.
         * Make sure all required fields are included in the view, or new nodes
           will fail validation.
+   3. Editview views, like all views, are created by navigating to structure/views
+        * Add new view
+        * Give new view a name
+        * Select type (Content, Users, Taxonomy Terms)
+        * Select type if content or taxonomy terms were chosen as type
+        * Choose Editview as Display Format
+        * Continue and Edit
+        * Select fields and filters, and save
 
 
 
