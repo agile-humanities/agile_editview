@@ -7,7 +7,7 @@ enabled.
 ##Install
 To install the Editview module:
 	1. Copy the Editview folder to the `sites/all/modules` folder in your installation.
-	2. Enable the module using `Administer -> Modules (admin/modules)`
+	2. Enable the module using `Administer -> Modules` (admin/modules)
 
 ## Dependencies
 	* Views
