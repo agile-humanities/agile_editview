@@ -10,8 +10,8 @@ To install the Editview module:
 	2. Enable the module using `Administer -> Modules` (admin/modules)  
 
 ## Dependencies
-	- Views  
-	- Entities  
+	+ Views  
+	+ Entities  
 
 ## Use
 Editable node views are created in the same way as any other type of view, with a few caveats:  
